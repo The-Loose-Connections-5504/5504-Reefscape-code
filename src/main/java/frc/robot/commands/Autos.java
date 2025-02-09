@@ -10,7 +10,7 @@ import frc.robot.subsystems.DriveTrain;
 public final class Autos {
   /** Example static factory for an autonomous command. */
   // the (DriveTrin DriveTain) is adding a requirment to the function.  
-  public Command Test(DriveTrain DriveTrain){
+  public static Command Test(DriveTrain DriveTrain){
     return Commands.sequence(
       DriveTrain.run(()-> DriveTrain.drive(1, 0, 0)).withTimeout(300),
       DriveTrain.run(()-> DriveTrain.drive(0, 1, 0)).withTimeout(400),
@@ -19,7 +19,7 @@ public final class Autos {
 
   }
   
-  public Command goofySpeeds(DriveTrain DriveTrain){
+  public static Command goofySpeeds(DriveTrain DriveTrain){
     return Commands.sequence(
       DriveTrain.run(()-> DriveTrain.drive(.5, 0, 0)).withTimeout(100),
       DriveTrain.run(()-> DriveTrain.drive(0, .5, 0)).withTimeout(200),

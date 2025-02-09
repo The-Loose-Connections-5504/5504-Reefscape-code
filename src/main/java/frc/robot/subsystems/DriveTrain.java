@@ -12,12 +12,12 @@ import frc.robot.Constants;
 
 public class DriveTrain extends SubsystemBase {
   //Defines Motors
-  public final PWMSparkMax frontLeft = new PWMSparkMax(Constants.DriveTrainMotorIDs.leftFrontWheelID);
-  public final PWMSparkMax frontRight = new PWMSparkMax(Constants.DriveTrainMotorIDs.rightFrontWheelID);
-  public final PWMSparkMax backLeft = new PWMSparkMax(Constants.DriveTrainMotorIDs.leftBackWheelID);
-  public final PWMSparkMax backRight = new PWMSparkMax(Constants.DriveTrainMotorIDs.rightBackWheelID);
+  private final PWMSparkMax frontLeft = new PWMSparkMax(Constants.DriveTrainMotorIDs.leftFrontWheelID);
+  private final PWMSparkMax frontRight = new PWMSparkMax(Constants.DriveTrainMotorIDs.rightFrontWheelID);
+  private final PWMSparkMax backLeft = new PWMSparkMax(Constants.DriveTrainMotorIDs.leftBackWheelID);
+  private final PWMSparkMax backRight = new PWMSparkMax(Constants.DriveTrainMotorIDs.rightBackWheelID);
   //defines DriveTrain
-  public final MecanumDrive mDrive = new MecanumDrive(frontLeft, backLeft, frontRight, backRight);
+  private final MecanumDrive mDrive = new MecanumDrive(frontLeft, backLeft, frontRight, backRight);
   
   /** Creates a new DriveTrain. */
   public DriveTrain() {}

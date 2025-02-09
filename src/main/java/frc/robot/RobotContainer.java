@@ -3,14 +3,9 @@
 // the WPILib BSD license file in the root directory of this project.
 
 package frc.robot;
-
-import frc.robot.Constants.OperatorConstants;
+//Imports the things used in the code
 import frc.robot.commands.Autos;
 import frc.robot.subsystems.DriveTrain;
-
-import javax.security.auth.AuthPermission;
-
-import edu.wpi.first.util.sendable.Sendable;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -25,11 +20,14 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
  * subsystems, commands, and trigger mappings) should be declared here.
  */
 public class RobotContainer {
-  public final DriveTrain mdrive = new DriveTrain();
-  public final Joystick stick1 = new Joystick(Constants.OperatorConstants.mainDriverPort);
-  public final SendableChooser<Commands> kChooser = new SendableChooser<Commands>();
-  public Command Test = Autos.goofySpeeds(mdrive);
+  //The Joysticks are defined here...
+  private  final Joystick stick1 = new Joystick(Constants.OperatorConstants.mainDriverPort);
+  private  final Joystick stick2 = new Joystick(Constants.OperatorConstants.secondDriverPort);
   // The robot's subsystems and commands are defined here...
+  private final DriveTrain mdrive = new DriveTrain();
+  private final Command Test = Autos.goofySpeeds(mdrive);
+  //The Auton Chooser is defined here...
+  private final SendableChooser<Commands> kChooser = new SendableChooser<>();
 
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
@@ -37,6 +35,8 @@ public class RobotContainer {
   public RobotContainer() {
     // Configure the trigger bindings
     configureBindings();
+    //Adds the commands to sendable chooser
+    defineCommands();
   }
 
   /**
@@ -58,7 +58,7 @@ public class RobotContainer {
     
   }
   public void defineCommands(){
-    
+    kChooser.addOption("goofySpeeds", Test);
   }
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
