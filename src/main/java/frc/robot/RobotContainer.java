@@ -7,9 +7,9 @@ package frc.robot;
 import frc.robot.commands.Autos;
 import frc.robot.subsystems.DriveTrain;
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
@@ -25,9 +25,10 @@ public class RobotContainer {
   private  final Joystick stick2 = new Joystick(Constants.OperatorConstants.secondDriverPort);
   // The robot's subsystems and commands are defined here...
   private final DriveTrain mdrive = new DriveTrain();
-  private final Command Test = Autos.goofySpeeds(mdrive);
+  private final Command kTest = Autos.goofySpeeds(mdrive);
+  private final Command kTest2 = Autos.Test(mdrive);
   //The Auton Chooser is defined here...
-  private final SendableChooser<Commands> kChooser = new SendableChooser<>();
+  private final SendableChooser<Command> kChooser = new SendableChooser<>();
 
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
@@ -58,7 +59,9 @@ public class RobotContainer {
     
   }
   public void defineCommands(){
-    kChooser.addOption("goofySpeeds", Test);
+    Shuffleboard.getTab("Autonomous").add(kChooser);
+    kChooser.addOption("goofySpeeds", kTest);
+    kChooser.addOption("Test 2 Man", kTest2);
   }
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
