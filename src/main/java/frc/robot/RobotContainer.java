@@ -51,7 +51,7 @@ public class RobotContainer {
    */
   private void configureBindings() {
     // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
-    //this cluster of a line controls the driving- currently doesn't have throttle- will fix
+    //this cluster of a line controls the driving- currently doesn't have throttle- will fix ASAP
     mdrive.setDefaultCommand(mdrive.run(()-> mdrive.drive(stick1.getRawAxis(1), stick1.getRawAxis(1), stick1.getRawAxis(1))));
 
     // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
@@ -59,7 +59,9 @@ public class RobotContainer {
     
   }
   public void defineCommands(){
+    //Adds a tab to the Shuffleboard based off the SmartDashBoard
     Shuffleboard.getTab("Autonomous").add(kChooser);
+    //Adds the options for the commands created in Autos.java
     kChooser.addOption("goofySpeeds", kTest);
     kChooser.addOption("Test 2 Man", kTest2);
   }
