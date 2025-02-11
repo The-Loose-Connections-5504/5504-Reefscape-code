@@ -5,14 +5,16 @@
 package frc.robot;
 //Imports the things used in the code
 import frc.robot.commands.Autos;
+import frc.robot.subsystems.BargeLift;
 import frc.robot.subsystems.DriveTrain;
-import edu.wpi.first.wpilibj.Joystick;
+import frc.robot.subsystems.KennysArm;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-
+import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
+// 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
  * "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
@@ -20,11 +22,14 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
  * subsystems, commands, and trigger mappings) should be declared here.
  */
 public class RobotContainer {
-  //The Joysticks are defined here...
-  private  final Joystick stick1 = new Joystick(Constants.OperatorConstants.mainDriverPort);
-  private  final Joystick stick2 = new Joystick(Constants.OperatorConstants.secondDriverPort);
+  //The Joysticks are defined here...  
+  // You maybe wondering why it's CommandJoystick and not just Joystick, this is because this is a Command Based Project
+  private  final CommandJoystick stick1 = new CommandJoystick(Constants.OperatorConstants.mainDriverPort);
+  private  final CommandJoystick stick2 = new CommandJoystick(Constants.OperatorConstants.secondDriverPort);
   // The robot's subsystems and commands are defined here...
   private final DriveTrain mdrive = new DriveTrain();
+  private final BargeLift mBargeLift = new BargeLift();
+  private final KennysArm mKennysArm = new KennysArm();
   private final Command kTest = Autos.goofySpeeds(mdrive);
   private final Command kTest2 = Autos.Test(mdrive);
   //The Auton Chooser is defined here...
@@ -50,13 +55,13 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
-    // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
     //this cluster of a line controls the driving- currently doesn't have throttle- will fix ASAP
     mdrive.setDefaultCommand(mdrive.run(()-> mdrive.drive(stick1.getRawAxis(1), stick1.getRawAxis(1), stick1.getRawAxis(1))));
-
-    // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
-    // cancelling on release.
-    
+    //Button Inputs  and ()-> is required
+    //This is for the Barge
+    stick1.button(2)
+      .onTrue(mBargeLift.run(()->mBargeLift.powerBarge(1)))
+      .onFalse(mBargeLift.run(()->mBargeLift.powerBarge(0)));
   }
   public void defineCommands(){
     //Adds a tab to the Shuffleboard based off the SmartDashBoard

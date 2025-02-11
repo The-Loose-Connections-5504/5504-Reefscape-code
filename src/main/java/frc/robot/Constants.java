@@ -17,7 +17,9 @@ public final class Constants {
     public static final int mainDriverPort = 0;
     public static final int secondDriverPort = 1;
     public static final int bargeLiftID = 4;
-    public static final int algaeMover = 5;
+    public static final int algaeMoverID = 5;
+    public static final int iKennyArmRotaterID = 6;
+    public static final int iKoralFeederID = 7;
   
   }
   public static class DriveTrainMotorIDs{
