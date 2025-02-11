@@ -22,6 +22,7 @@ public class KennysArm extends SubsystemBase {
   public KennysArm() {
     //I blame Kenny if this doesn't work :P
     kRotatorConfig.idleMode(IdleMode.kBrake);
+    //I don't know what the hell this voltage  does but it's here and it might work sooo.......
     kKennyArmRotator.setVoltage(1);
     kKennyArmRotator.configure(kRotatorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
   }
