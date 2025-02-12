@@ -32,6 +32,7 @@ public class RobotContainer {
   private final KennysArm mKennysArm = new KennysArm();
   private final Command kTest = Autos.goofySpeeds(mdrive);
   private final Command kTest2 = Autos.Test(mdrive);
+  private final Command kMotorTest = Autos.motorTest(mKennysArm);
   //The Auton Chooser is defined here...
   private final SendableChooser<Command> kChooser = new SendableChooser<>();
 
@@ -69,6 +70,7 @@ public class RobotContainer {
     //Adds the options for the commands created in Autos.java
     kChooser.addOption("goofySpeeds", kTest);
     kChooser.addOption("Test 2 Man", kTest2);
+    kChooser.addOption("MotorTest", kMotorTest);
   }
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
