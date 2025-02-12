@@ -12,18 +12,18 @@ public final class Autos {
   // the (DriveTrin DriveTain) is adding a requirment to the function.  
   public static Command Test(DriveTrain DriveTrain){
     return Commands.sequence(
-      DriveTrain.run(()-> DriveTrain.drive(1, 0, 0)).withTimeout(300),
-      DriveTrain.run(()-> DriveTrain.drive(0, 1, 0)).withTimeout(400),
-      DriveTrain.run(()-> DriveTrain.drive(0, .0, 0)).withTimeout(200)
+      DriveTrain.run(()-> DriveTrain.drive(1, 0, 0)).withTimeout(1),
+      DriveTrain.run(()-> DriveTrain.drive(0, 1, 0)).withTimeout(2),
+      DriveTrain.run(()-> DriveTrain.drive(0, .0, 0)).withTimeout(3)
     );
 
   }
   
   public static Command goofySpeeds(DriveTrain DriveTrain){
     return Commands.sequence(
-      DriveTrain.run(()-> DriveTrain.drive(.5, 0, 0)).withTimeout(100),
-      DriveTrain.run(()-> DriveTrain.drive(0, .5, 0)).withTimeout(200),
-      DriveTrain.run(()-> DriveTrain.drive(0, .0, 0)).withTimeout(200)
+      DriveTrain.run(()-> DriveTrain.drive(.5, 0, 0)).withTimeout(4),
+      DriveTrain.run(()-> DriveTrain.drive(0, .5, 0)).withTimeout(5),
+      DriveTrain.run(()-> DriveTrain.drive(0, .0, 0)).withTimeout(6)
     );
   }
   private Autos() {
