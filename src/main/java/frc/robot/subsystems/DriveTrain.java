@@ -6,6 +6,8 @@ package frc.robot.subsystems;
 
 //imports stuff for the code, you know what.... you get the gist  
 import edu.wpi.first.wpilibj.drive.MecanumDrive;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.SparkMax;
@@ -38,6 +40,7 @@ public class DriveTrain extends SubsystemBase {
   }
   @Override
   public void periodic() {
+    SmartDashboard.putNumber("Motor Speeds", frontLeft.get());
     // This method will be called once per scheduler run
   }
 }
