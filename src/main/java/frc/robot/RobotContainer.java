@@ -8,6 +8,9 @@ import frc.robot.commands.Autos;
 import frc.robot.subsystems.BargeLift;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.KennysArm;
+
+import java.util.Set;
+
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -35,15 +38,68 @@ public class RobotContainer {
   private final Command kMotorTest = Autos.motorTest(mKennysArm);
   //The Auton Chooser is defined here...
   private final SendableChooser<Command> kChooser = new SendableChooser<>();
+  //Values for throttle 
+  double threshHoldY = 0.15;
+  double threshHoldX = 0.15;
+  double threshHoldZ = 0.15;
+  double threshHoldTrig1 = 0.1;
+  double threshHoldTrig2 = 0.1;
+  double throttle = 0.25;
+  //Deadzone
+  double scaledDeadZoneX;
+  double scaledDeadZoneY;
+  double scaledDeadZoneTwist;
 
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
+
     // Configure the trigger bindings
     configureBindings();
     //Adds the commands to sendable chooser
     defineCommands();
+    //Throttle --- cause the driver would kill me otherwise
+    if ((stick1.getRawAxis(2) > threshHoldTrig1 || stick1.getRawAxis(2) < threshHoldTrig1) && !(throttle < 0))
+		{
+			throttle = (throttle - (stick1.getRawAxis(2)/30));
+		}
+
+		if ((stick1.getRawAxis(3) > threshHoldTrig2 || stick1.getRawAxis(3) < threshHoldTrig2) && !(throttle > 1))
+		{
+			throttle = (throttle + (stick1.getRawAxis(3)/30));
+		}
+    //Clean Up throttle Value
+    if(throttle > 1 || throttle < 0)
+		{
+			throttle = Math.round(throttle);
+		}
+
+    //Deadband 
+    if (stick1.getRawAxis(1) > threshHoldY || stick1.getRawAxis(1) < threshHoldY * -1) 
+		{
+			scaledDeadZoneY = stick1.getRawAxis(1);
+		}
+		  else 
+		  {
+			scaledDeadZoneY = 0;
+		}
+    if (stick1.getRawAxis(0) > threshHoldX || stick1.getRawAxis(0) < threshHoldX * -1)
+     {
+      scaledDeadZoneX = stick1.getRawAxis(0);
+      }
+      else 
+        {
+          scaledDeadZoneX = 0;
+        }
+    if (stick1.getRawAxis(4) > threshHoldZ || stick1.getRawAxis(4) < threshHoldZ * -1) 
+      {
+        scaledDeadZoneTwist = stick1.getRawAxis(4);
+      }
+      else 
+      {
+        scaledDeadZoneTwist = 0;
+      }
   }
 
   /**
@@ -57,7 +113,7 @@ public class RobotContainer {
    */
   private void configureBindings() {
     //this cluster of a line controls the driving- currently doesn't have throttle- will fix ASAP
-    mdrive.setDefaultCommand(mdrive.run(()-> mdrive.drive(stick1.getRawAxis(1), stick1.getRawAxis(1), stick1.getRawAxis(1))));
+    mdrive.setDefaultCommand(mdrive.run(()-> mdrive.drive(scaledDeadZoneX * throttle, scaledDeadZoneY * throttle, scaledDeadZoneTwist * throttle)));
     //Button Inputs  and ()-> is required
     //This is for the Barge
     stick1.button(2)
