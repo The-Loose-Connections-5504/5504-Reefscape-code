@@ -100,6 +100,8 @@ public class RobotContainer {
       {
         scaledDeadZoneTwist = 0;
       }
+
+  //Hopefully deadband and Throttle functions as intended cause i pasted the original.. :P
   }
 
   /**
