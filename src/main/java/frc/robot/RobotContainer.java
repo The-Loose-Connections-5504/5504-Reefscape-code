@@ -5,12 +5,10 @@
 package frc.robot;
 //Imports the things used in the code
 import frc.robot.commands.Autos;
+import frc.robot.subsystems.AlgeMover;
 import frc.robot.subsystems.BargeLift;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.KennysArm;
-
-import java.util.Set;
-
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -33,6 +31,7 @@ public class RobotContainer {
   private final DriveTrain mdrive = new DriveTrain();
   private final BargeLift mBargeLift = new BargeLift();
   private final KennysArm mKennysArm = new KennysArm();
+  private final AlgeMover mAlgeMover = new AlgeMover();
   private final Command kTest = Autos.goofySpeeds(mdrive);
   private final Command kTest2 = Autos.Test(mdrive);
   private final Command kMotorTest = Autos.motorTest(mKennysArm);
@@ -117,10 +116,18 @@ public class RobotContainer {
     //this cluster of a line controls the driving- currently doesn't have throttle- will fix ASAP
     mdrive.setDefaultCommand(mdrive.run(()-> mdrive.drive(scaledDeadZoneX * throttle, scaledDeadZoneY * throttle, scaledDeadZoneTwist * throttle)));
     //Button Inputs  and ()-> is required
-    //This is for the Barge
-    stick1.button(2)
-      .onTrue(mBargeLift.run(()->mBargeLift.powerBarge(1)))
-      .onFalse(mBargeLift.run(()->mBargeLift.powerBarge(0)));
+    //Quinton' BargeLift - Player 1
+    stick1.button(2).onTrue(mBargeLift.run(()->mBargeLift.powerBarge(1)));
+    stick1.button(3).onTrue(mBargeLift.run(()->mBargeLift.powerBarge(-1)));
+
+    //Kenny's Arm - Player 2
+    stick2.button(2).onTrue(mKennysArm.run(()->mKennysArm.rotateArm(1)));
+    stick2.button(3).onTrue(mKennysArm.run(()->mKennysArm.rotateArm(-1)));
+    stick2.button(4).onTrue(mKennysArm.run(()->mKennysArm.intake(-1)));
+
+    //Carsen and Nickolas' AlgeMover - Player 2
+    stick2.button(8).onTrue(mAlgeMover.run(()->mAlgeMover.setMoverSpeed(1)));
+    stick2.button(7).onTrue(mAlgeMover.run(()->mAlgeMover.setRotateSpeed(1)));
   }
   public void defineCommands(){
     //Adds a tab to the Shuffleboard based off the SmartDashBoard
