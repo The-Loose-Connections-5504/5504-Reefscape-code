@@ -12,9 +12,9 @@ import frc.robot.subsystems.KennysArm;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
+//Legit No difference from a CommandJoystick, just has the id's already set for a XBOX controller
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 // 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -24,9 +24,9 @@ import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
  */
 public class RobotContainer {
   //The Joysticks are defined here...  
-  // You maybe wondering why it's CommandJoystick and not just Joystick, this is because this is a Command Based Project
-  private  final CommandJoystick stick1 = new CommandJoystick(Constants.OperatorConstants.mainDriverPort);
-  private  final CommandJoystick stick2 = new CommandJoystick(Constants.OperatorConstants.secondDriverPort);
+  // You maybe wondering why it's CommandXboxController and not just Joystick, this is because this is a Command Based Project
+  private  final CommandXboxController stick1 = new CommandXboxController(Constants.OperatorConstants.mainDriverPort);
+  private  final CommandXboxController stick2 = new CommandXboxController(Constants.OperatorConstants.secondDriverPort);
   // The robot's subsystems and commands are defined here...
   private final DriveTrain mdrive = new DriveTrain();
   private final BargeLift mBargeLift = new BargeLift();
@@ -117,17 +117,18 @@ public class RobotContainer {
     mdrive.setDefaultCommand(mdrive.run(()-> mdrive.drive(scaledDeadZoneX * throttle, scaledDeadZoneY * throttle, scaledDeadZoneTwist * throttle)));
     //Button Inputs  and ()-> is required
     //Quinton' BargeLift - Player 1
-    stick1.button(2).onTrue(mBargeLift.run(()->mBargeLift.powerBarge(1)));
-    stick1.button(3).onTrue(mBargeLift.run(()->mBargeLift.powerBarge(-1)));
+    stick1.x().onTrue(mBargeLift.run(()->mBargeLift.powerBarge(1)));
+    stick1.y().onTrue(mBargeLift.run(()->mBargeLift.powerBarge(-1)));
 
     //Kenny's Arm - Player 2
-    stick2.button(2).onTrue(mKennysArm.run(()->mKennysArm.rotateArm(1)));
-    stick2.button(3).onTrue(mKennysArm.run(()->mKennysArm.rotateArm(-1)));
-    stick2.button(4).onTrue(mKennysArm.run(()->mKennysArm.intake(-1)));
+    stick2.rightBumper().onTrue(mKennysArm.run(()->mKennysArm.rotateArm(1)));
+    stick2.leftBumper().onTrue(mKennysArm.run(()->mKennysArm.rotateArm(-1)));
+    stick2.a().onTrue(mKennysArm.run(()->mKennysArm.intake(-1)));
 
     //Carsen and Nickolas' AlgeMover - Player 2
-    stick2.button(8).onTrue(mAlgeMover.run(()->mAlgeMover.setMoverSpeed(1)));
-    stick2.button(7).onTrue(mAlgeMover.run(()->mAlgeMover.setRotateSpeed(1)));
+    stick2.b().onTrue(mAlgeMover.run(()->mAlgeMover.setMoverSpeed(1)));
+    stick2.x().onTrue(mAlgeMover.run(()->mAlgeMover.setRotateSpeed(1)));
+    stick2.y().onTrue(mAlgeMover.run(()->mAlgeMover.setRotateSpeed(-1)));
   }
   public void defineCommands(){
     //Adds a tab to the Shuffleboard based off the SmartDashBoard
