@@ -33,7 +33,7 @@ public class RobotContainer {
   private final KennysArm mKennysArm = new KennysArm();
   private final AlgeMover mAlgeMover = new AlgeMover();
   private final Command kTest = Autos.goofySpeeds(mdrive);
-  private final Command kTest2 = Autos.Test(mdrive);
+  private final Command kDriveForward = Autos.kDriveForwardForTwoSeconds(mdrive);
   private final Command kMotorTest = Autos.motorTest(mKennysArm);
   //The Auton Chooser is defined here...
   private final SendableChooser<Command> kChooser = new SendableChooser<>();
@@ -133,8 +133,8 @@ public class RobotContainer {
     //Adds a tab to the Shuffleboard based off the SmartDashBoard
     Shuffleboard.getTab("Autonomous").add(kChooser);
     //Adds the options for the commands created in Autos.java
+    kChooser.addOption("Drive Forward for Two Seconds", kDriveForward);
     kChooser.addOption("goofySpeeds", kTest);
-    kChooser.addOption("Test 2 Man", kTest2);
     kChooser.addOption("MotorTest", kMotorTest);
   }
   /**
