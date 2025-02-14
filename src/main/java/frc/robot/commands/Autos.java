@@ -14,6 +14,7 @@ public final class Autos {
   public static Command Test(DriveTrain DriveTrain){
     return Commands.sequence(
       DriveTrain.run(()-> DriveTrain.drive(1, 0, 0)).withTimeout(2),
+      //withTimeout() is the duration of a command/how long it lasts
       DriveTrain.run(()-> DriveTrain.drive(0, 1, 0)).withTimeout(5),
       DriveTrain.run(()-> DriveTrain.drive(0, .0, 0)).withTimeout(9)
     );
