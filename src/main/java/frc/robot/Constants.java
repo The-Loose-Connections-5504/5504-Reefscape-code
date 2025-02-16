@@ -12,21 +12,40 @@ package frc.robot;
  * <p>It is advised to statically import this class (or one of its inner classes) wherever the
  * constants are needed, to reduce verbosity.
  */
+
+ // Public means you can access these ANYWHERE in the code.  
 public final class Constants {
-  public static class OperatorConstants {
+  public static class OperatorConstants { // Operate constants/Players
     public static final int mainDriverPort = 0;
     public static final int secondDriverPort = 1;
-    public static final int bargeLiftID = 4;
-    public static final int algaeMoverID = 5;
-    public static final int algaeRotater =8;
     public static final int iKennyArmRotaterID = 6;
     public static final int iKoralFeederID = 7;
   
   }
-  public static class DriveTrainMotorIDs{
+  public static class DriveTrainMotorIDs{ // OLD DRIVETRAIN Constants -- They Never Change so it's static
     public static final int leftFrontWheelID  = 0;
     public static final int rightFrontWheelID  = 1;
     public static final int leftBackWheelID  = 2;
     public static final int rightBackWheelID  = 3;
+  }
+
+  public static class AlgeMover{ // AlgeMover Constants -- They Never Change so it's static
+    public static final int algaeMoverID = 5;
+    public static final int algaeRotater =8;
+  }
+  public static class BargeLift{ // BargeLift Constants -- They Never Change so it's static
+    public static final int bargeLiftID = 4;
+  }
+  public static class KennysArm{ // Kenny's Arm Constants -- Static cause they never change
+    public static final int iKennyArmRotaterID = 6;
+    public static final int iKoralFeederID = 7;
+  }
+  public static class elevator{ // Kenny's Arm Constants -- Static cause they never change
+    public static final int kLiftMotorId = 6;
+    public static final int KLiftEncoderId1 = 0;
+    public static final int KLiftEncoderId2 = 1;
+    public static final double kP = 0.05;
+    public static final double kI = 0.0;
+    public static final double kD = 0.0;
   }
 }

@@ -17,7 +17,7 @@ import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 public class BargeLift extends SubsystemBase {
   //Defines Motors
-  private final SparkMax kBargeMotor = new SparkMax(Constants.OperatorConstants.bargeLiftID, MotorType.kBrushless);
+  private final SparkMax kBargeMotor = new SparkMax(Constants.BargeLift.bargeLiftID, MotorType.kBrushless);
   private final SparkMaxConfig config = new SparkMaxConfig();
   /** Creates a new BargeLift. */
   public BargeLift() {

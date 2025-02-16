@@ -15,8 +15,8 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class KennysArm extends SubsystemBase {
-  private final SparkMax kKennyArmRotator = new SparkMax(Constants.OperatorConstants.iKennyArmRotaterID, MotorType.kBrushless);
-  private final SparkMax kKennyKoralSeeder = new SparkMax(Constants.OperatorConstants.iKoralFeederID, MotorType.kBrushless);
+  private final SparkMax kKennyArmRotator = new SparkMax(Constants.KennysArm.iKennyArmRotaterID, MotorType.kBrushless);
+  private final SparkMax kKennyKoralSeeder = new SparkMax(Constants.KennysArm.iKoralFeederID, MotorType.kBrushless);
   private final SparkMaxConfig kRotatorConfig = new SparkMaxConfig();
   /** Creates a new KennysArm. */
   public KennysArm() {
