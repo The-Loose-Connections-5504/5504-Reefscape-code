@@ -29,18 +29,18 @@ public final class Constants {
     public static final int rightBackWheelID  = 3;
   }
 
-  public static class AlgeMover{ // AlgeMover Constants -- They Never Change so it's static
+  public static class AlgeMoverConstants{ // AlgeMover Constants -- They Never Change so it's static
     public static final int algaeMoverID = 5;
     public static final int algaeRotater =8;
   }
-  public static class BargeLift{ // BargeLift Constants -- They Never Change so it's static
+  public static class BargeLiftConstants{ // BargeLift Constants -- They Never Change so it's static
     public static final int bargeLiftID = 4;
   }
-  public static class KennysArm{ // Kenny's Arm Constants -- Static cause they never change
+  public static class KennysArmConstants{ // Kenny's Arm Constants -- Static cause they never change
     public static final int iKennyArmRotaterID = 6;
     public static final int iKoralFeederID = 7;
   }
-  public static class elevator{ // Kenny's Arm Constants -- Static cause they never change
+  public static class elevatorConstants{ // Kenny's Arm Constants -- Static cause they never change
     public static final int kLiftMotorId = 6;
     public static final int KLiftEncoderId1 = 0;
     public static final int KLiftEncoderId2 = 1;

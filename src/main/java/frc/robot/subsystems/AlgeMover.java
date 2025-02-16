@@ -15,8 +15,8 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class AlgeMover extends SubsystemBase {
-  private final SparkMax kMoverRoatater = new SparkMax(Constants.AlgeMover.algaeRotater, MotorType.kBrushless);
-  private final SparkMax kIntake = new SparkMax(Constants.AlgeMover.algaeMoverID, MotorType.kBrushless);
+  private final SparkMax kMoverRoatater = new SparkMax(Constants.AlgeMoverConstants.algaeRotater, MotorType.kBrushless);
+  private final SparkMax kIntake = new SparkMax(Constants.AlgeMoverConstants.algaeMoverID, MotorType.kBrushless);
   private final SparkMaxConfig config = new SparkMaxConfig();
   /** Creates a new AlgeMover. */
   public AlgeMover() {
