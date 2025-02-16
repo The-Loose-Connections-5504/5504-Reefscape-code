@@ -53,7 +53,7 @@ public class RobotContainer {
   // Replace with CommandPS4Controller or CommandJoystick if needed
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
-
+    
     // Configure the trigger bindings
     configureBindings();
     //Adds the commands to sendable chooser
@@ -129,6 +129,9 @@ public class RobotContainer {
     stick2.b().onTrue(mAlgeMover.run(()->mAlgeMover.setMoverSpeed(1)));
     stick2.x().onTrue(mAlgeMover.run(()->mAlgeMover.setRotateSpeed(1)));
     stick2.y().onTrue(mAlgeMover.run(()->mAlgeMover.setRotateSpeed(-1)));
+
+    //Swifty Elevator
+    
   }
   public void defineCommands(){
     //Adds a tab to the Shuffleboard based off the SmartDashBoard
