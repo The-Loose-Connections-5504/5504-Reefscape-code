@@ -8,6 +8,7 @@ import frc.robot.commands.Autos;
 import frc.robot.subsystems.AlgeMover;
 import frc.robot.subsystems.BargeLift;
 import frc.robot.subsystems.DriveTrain;
+import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.KennysArm;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -32,9 +33,11 @@ public class RobotContainer {
   private final BargeLift mBargeLift = new BargeLift();
   private final KennysArm mKennysArm = new KennysArm();
   private final AlgeMover mAlgeMover = new AlgeMover();
+  private final ElevatorSubsystem mElevator = new ElevatorSubsystem();
   private final Command kTest = Autos.goofySpeeds(mdrive);
   private final Command kDriveForward = Autos.kDriveForwardForTwoSeconds(mdrive);
   private final Command kMotorTest = Autos.motorTest(mKennysArm);
+  private final Command kElevatorTest = Autos.kTestElevator(mElevator);
   //The Auton Chooser is defined here...
   private final SendableChooser<Command> kChooser = new SendableChooser<>();
   //Values for throttle 
@@ -131,7 +134,7 @@ public class RobotContainer {
     stick2.y().onTrue(mAlgeMover.run(()->mAlgeMover.setRotateSpeed(-1)));
 
     //Swifty Elevator
-    
+    stick1.button(0).onTrue(mElevator.run(()->mElevator.ClimbTo(3)));
   }
   public void defineCommands(){
     //Adds a tab to the Shuffleboard based off the SmartDashBoard
@@ -140,6 +143,7 @@ public class RobotContainer {
     kChooser.addOption("Drive Forward for Two Seconds", kDriveForward);
     kChooser.addOption("goofySpeeds", kTest);
     kChooser.addOption("MotorTest", kMotorTest);
+    kChooser.addOption("ElevatorTest", kElevatorTest);
   }
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.

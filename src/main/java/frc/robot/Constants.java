@@ -41,12 +41,12 @@ public final class Constants {
     public static final int iKoralFeederID = 7;
   }
   public static class elevatorConstants{ // Kenny's Arm Constants -- Static cause they never change
-    public static final int kLiftMotorId = 6;
+    public static final int kLiftMotorId = 11;
     public static final int KLiftEncoderId1 = 0;
-    public static final int KLiftEncoderId2 = 1;
-    public static final double kP = 0.05;
-    public static final double kI = 0.0;
-    public static final double kD = 0.0;
+    public static final int KLiftEncoderId2 = 2;
+    public static final double kP = 0.33;
+    public static final double kI = 0.15;
+    public static final double kD = 0.05;
     public static final double cirumfrenceInfeet = 0.0218166;
   }
 }
