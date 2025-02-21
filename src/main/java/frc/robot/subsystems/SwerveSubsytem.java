@@ -5,10 +5,38 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
+
+import static edu.wpi.first.units.Units.Meter;
+
+import java.io.File;
+import edu.wpi.first.wpilibj.Filesystem;
+import swervelib.parser.SwerveParser;
+import swervelib.SwerveDrive;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.util.Units;
 
 public class SwerveSubsytem extends SubsystemBase {
+  File swerveJsonDirectory = new File(Filesystem.getDeployDirectory(),"swerve");
+  SwerveDrive  swerveDrive;
+//new SwerveParser(directory).createSwerveDrive(maximumSpeed);
   /** Creates a new SwerveSubsytem. */
-  public SwerveSubsytem() {}
+  public SwerveSubsytem(File directory) {
+        try
+    {
+            swerveDrive = new SwerveParser(directory).createSwerveDrive(Constants.GettinSwervy.maximumSpeed,
+                                                                  new Pose2d(new Translation2d(Meter.of(1),
+                                                                                               Meter.of(4)),
+                                                                             Rotation2d.fromDegrees(0)));
+      // Alternative method if you don't want to supply the conversion factor via JSON files.
+      // swerveDrive = new SwerveParser(directory).createSwerveDrive(maximumSpeed, angleConversionFactor, driveConversionFactor);
+    } catch (Exception e)
+    {
+      throw new RuntimeException(e);
+    }
+  }
 
   @Override
   public void periodic() {

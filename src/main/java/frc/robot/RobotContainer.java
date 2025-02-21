@@ -10,6 +10,8 @@ import frc.robot.subsystems.BargeLift;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.KennysArm;
+import frc.robot.subsystems.SwerveSubsytem;
+import swervelib.SwerveInputStream;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -34,6 +36,7 @@ public class RobotContainer {
   private final KennysArm mKennysArm = new KennysArm();
   private final AlgeMover mAlgeMover = new AlgeMover();
   private final ElevatorSubsystem mElevator = new ElevatorSubsystem();
+  private final SwerveSubsytem SwervyDrive = new SwerveSubsytem();
   private final Command kTest = Autos.goofySpeeds(mdrive);
   private final Command kDriveForward = Autos.kDriveForwardForTwoSeconds(mdrive);
   private final Command kMotorTest = Autos.motorTest(mKennysArm);
@@ -117,7 +120,7 @@ public class RobotContainer {
    */
   private void configureBindings() {
     //this cluster of a line controls the driving- currently doesn't have throttle- will fix ASAP
-    mdrive.setDefaultCommand(mdrive.run(()-> mdrive.drive(scaledDeadZoneX * throttle, scaledDeadZoneY * throttle, scaledDeadZoneTwist * throttle)));
+
     //Button Inputs  and ()-> is required
     //Quinton' BargeLift - Player 1
     stick1.x().onTrue(mBargeLift.run(()->mBargeLift.powerBarge(1)));
@@ -145,6 +148,10 @@ public class RobotContainer {
     kChooser.addOption("MotorTest", kMotorTest);
     kChooser.addOption("ElevatorTest", kElevatorTest);
   }
+  SwerveInputStream KswerveAngleSpeed = SwerveInputStream.of(SwervyDrive.getSwerveDrive(), 
+                                                            ()-> scaledDeadZoneY * throttle,
+                                                            ()-> scaledDeadZoneX * throttle).withControllerHeadingAxis(stick1::getRightX)
+                                                            .deadband(0.15).scaleTranslation(0.8).allianceRelativeControl(false);
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
    *

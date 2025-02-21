@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import edu.wpi.first.math.util.Units;
+
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
  * constants. This class should not be used for any other purpose. All constants should be declared
@@ -48,5 +50,8 @@ public final class Constants {
     public static final double kI = 0.15;
     public static final double kD = 0.05;
     public static final double cirumfrenceInfeet = 0.0218166;
+  }
+  public static class GettinSwervy{
+    public static final double maximumSpeed = Units.feetToMeters(4.5);
   }
 }
