@@ -120,6 +120,7 @@ public class RobotContainer {
    */
   private void configureBindings() {
     //this cluster of a line controls the driving- currently doesn't have throttle- will fix ASAP
+    SwervyDrive.setDefaultCommand(DriveFieldOrientatedAngleSpeed);
 
     //Button Inputs  and ()-> is required
     //Quinton' BargeLift - Player 1
@@ -148,10 +149,17 @@ public class RobotContainer {
     kChooser.addOption("MotorTest", kMotorTest);
     kChooser.addOption("ElevatorTest", kElevatorTest);
   }
-  SwerveInputStream KswerveAngleSpeed = SwerveInputStream.of(SwervyDrive.getSwerveDrive(), 
+  SwerveInputStream kSwerveAngleSpeed = SwerveInputStream.of(SwervyDrive.getSwerveDrive(), 
                                                             ()-> scaledDeadZoneY * throttle,
-                                                            ()-> scaledDeadZoneX * throttle).withControllerHeadingAxis(stick1::getRightX)
-                                                            .deadband(0.15).scaleTranslation(0.8).allianceRelativeControl(false);
+                                                            ()-> scaledDeadZoneX * throttle).withControllerRotationAxis(()-> scaledDeadZoneTwist * throttle)
+                                                            .deadband(0.15)
+                                                            .scaleTranslation(0.8)
+                                                            .allianceRelativeControl(false);
+
+  SwerveInputStream kDriveDirectAngle = kSwerveAngleSpeed.copy().withControllerHeadingAxis(()-> scaledDeadZoneTwist * throttle, stick1::getRightY).headingWhile(true);
+  //Getting the Angle and Speed 
+  Command driveFieldOrientatedDirect = SwervyDrive.driveFieldOriented(kDriveDirectAngle);
+  Command DriveFieldOrientatedAngleSpeed = SwervyDrive.driveFieldOriented(kSwerveAngleSpeed);
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
    *
