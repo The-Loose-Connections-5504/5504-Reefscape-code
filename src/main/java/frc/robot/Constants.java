@@ -44,6 +44,7 @@ public final class Constants {
   }
   public static class elevatorConstants{ // Kenny's Arm Constants -- Static cause they never change
     public static final int kLiftMotorId = 13;
+    public static final int kLiftMotor2ID = 28;
     public static final int KLiftEncoderId1 = 0;
     public static final int KLiftEncoderId2 = 2;
     public static final double kP = 0.33;

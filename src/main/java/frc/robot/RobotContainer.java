@@ -40,7 +40,6 @@ public class RobotContainer {
   private final Command kTest = Autos.goofySpeeds(mdrive);
   private final Command kDriveForward = Autos.kDriveForwardForTwoSeconds(mdrive);
   private final Command kMotorTest = Autos.motorTest(mKennysArm);
-  private final Command kElevatorTest = Autos.kTestElevator(mElevator);
   //The Auton Chooser is defined here...
   private final SendableChooser<Command> kChooser = new SendableChooser<>();
   //Values for throttle 
@@ -124,21 +123,42 @@ public class RobotContainer {
 
     //Button Inputs  and ()-> is required
     //Quinton' BargeLift - Player 1
-    stick1.x().onTrue(mBargeLift.run(()->mBargeLift.powerBarge(1)));
-    stick1.y().onTrue(mBargeLift.run(()->mBargeLift.powerBarge(-1)));
+    stick1.x()
+      .onTrue(mBargeLift.run(()->mBargeLift.powerBarge(1)))
+      .onFalse(mBargeLift.run(()->mBargeLift.powerBarge(0)));
+
+    stick1.y()
+      .onTrue(mBargeLift.run(()->mBargeLift.powerBarge(-1)))
+      .onFalse(mBargeLift.run(()->mBargeLift.powerBarge(0)));
 
     //Kenny's Arm - Player 2
-    stick2.rightBumper().onTrue(mKennysArm.run(()->mKennysArm.rotateArm(1)));
-    stick2.leftBumper().onTrue(mKennysArm.run(()->mKennysArm.rotateArm(-1)));
-    stick2.a().onTrue(mKennysArm.run(()->mKennysArm.intake(-1)));
+    stick2.rightBumper()
+      .onTrue(mKennysArm.run(()->mKennysArm.rotateArm(1)))
+      .onTrue(mKennysArm.run(()->mKennysArm.rotateArm(0)));
+    stick2.leftBumper()
+      .onTrue(mKennysArm.run(()->mKennysArm.rotateArm(-1)))
+      .onFalse(mKennysArm.run(()->mKennysArm.rotateArm(0)));
+    stick2.a()
+      .onTrue(mKennysArm.run(()->mKennysArm.intake(-1)))
+      .onFalse(mKennysArm.run(()->mKennysArm.intake(0)));
 
     //Carsen and Nickolas' AlgeMover - Player 2
-    stick2.b().onTrue(mAlgeMover.run(()->mAlgeMover.setMoverSpeed(1)));
-    stick2.x().onTrue(mAlgeMover.run(()->mAlgeMover.setRotateSpeed(1)));
-    stick2.y().onTrue(mAlgeMover.run(()->mAlgeMover.setRotateSpeed(-1)));
-
+    stick2.b()
+      .onTrue(mAlgeMover.run(()->mAlgeMover.setMoverSpeed(1)))
+      .onFalse(mAlgeMover.run(()->mAlgeMover.setMoverSpeed(0)));
+    stick2.x()
+      .onTrue(mAlgeMover.run(()->mAlgeMover.setRotateSpeed(1)))
+      .onFalse(mAlgeMover.run(()->mAlgeMover.setRotateSpeed(0)));
+    stick2.y()
+      .onTrue(mAlgeMover.run(()->mAlgeMover.setRotateSpeed(-1)))
+      .onFalse(mAlgeMover.run(()->mAlgeMover.setRotateSpeed(0)));
+    stick2.povUp()
+      .onTrue(mElevator.MoveUp(1))
+      .onFalse(mElevator.MoveUp(0));
+    stick2.povDown()
+      .onTrue(mElevator.MoveDown(-1))
+      .onFalse(mElevator.MoveDown(0));
     //Swifty Elevator
-    stick1.button(0).onTrue(mElevator.run(()->mElevator.ClimbTo(3)));
   }
   public void defineCommands(){
     //Adds a tab to the Shuffleboard based off the SmartDashBoard
@@ -147,7 +167,6 @@ public class RobotContainer {
     kChooser.addOption("Drive Forward for Two Seconds", kDriveForward);
     kChooser.addOption("goofySpeeds", kTest);
     kChooser.addOption("MotorTest", kMotorTest);
-    kChooser.addOption("ElevatorTest", kElevatorTest);
   }
   SwerveInputStream kSwerveAngleSpeed = SwerveInputStream.of(SwervyDrive.getSwerveDrive(), 
                                                             ()-> scaledDeadZoneY * throttle,

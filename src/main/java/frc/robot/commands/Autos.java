@@ -7,7 +7,6 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.subsystems.AlgeMover;
 import frc.robot.subsystems.DriveTrain;
-import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.KennysArm;
 
 public final class Autos {
@@ -37,12 +36,6 @@ public final class Autos {
         kennysArm.run(()->kennysArm.rotateArm(0)).withTimeout(9)
         );
     }
-     public static Command kTestElevator(ElevatorSubsystem kElevatorSubsystem){ //Test Command - Write Over this -- DO NOT COMMENT OUT
-      return Commands.sequence(
-        kElevatorSubsystem.run(()->kElevatorSubsystem.ClimbTo(1.5)).withTimeout(9),
-        kElevatorSubsystem.run(()->kElevatorSubsystem.ClimbTo(0)).withTimeout(10)
-        );
-  }
     public static Command kRunonceExample(AlgeMover kMoo){ //REMOVE -- DO NOT COMMENT OUT....
       return kMoo.run(()->kMoo.setMoverSpeed(1));
     }
