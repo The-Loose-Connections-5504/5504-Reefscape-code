@@ -6,6 +6,7 @@ package frc.robot.subsystems;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
@@ -28,18 +29,26 @@ public class ElevatorSubsystem extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
   }
-  public void SetHeightinTicks(double value) {
-    HeightInTicks = value;
+  public void addHeight(double rate) {
+     HeightInTicks += rate;
+  }
+  public void subtract(double rate) {
+     HeightInTicks -= rate;
   }
   public double GetHeightInTicks() {
     return HeightInTicks;
   }
   public Command MoveUp(double speed){
-    return run(()->setSpeed(speed)
-    ).until(()->GetHeightInTicks() <=2000);
+    return Commands.parallel(
+     run(()-> addHeight(2)),
+     run(()->setSpeed(speed))
+    ).until(()->GetHeightInTicks() >=2000);
   }
+  //God this is a Hacky solution to a problem but I do not care because of time...
   public Command MoveDown(double speed){
-    return run(()->setSpeed(speed)
-    ).until(()->GetHeightInTicks() >=0);
+    return Commands.parallel(
+     run(()-> addHeight(2)),
+     run(()->setSpeed(speed))
+    ).until(()->GetHeightInTicks() <= 0);
   }
 }

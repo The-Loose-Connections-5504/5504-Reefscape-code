@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class KennysArm extends SubsystemBase {
+
   private final SparkMaxConfig kRotatorConfig = new SparkMaxConfig();
   private final SparkMax kKennyArmRotator = new SparkMax(Constants.KennysArmConstants.iKennyArmRotaterID, MotorType.kBrushless);
   private final SparkMax kKennyKoralSeeder = new SparkMax(Constants.KennysArmConstants.iKoralFeederID, MotorType.kBrushless);
@@ -33,7 +34,6 @@ public class KennysArm extends SubsystemBase {
   public void intake (double speed){
     kKennyKoralSeeder.set(speed);
   }
-
   @Override
   public void periodic() {
     // This method will be called once per scheduler run

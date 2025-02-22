@@ -152,13 +152,15 @@ public class RobotContainer {
     stick2.y()
       .onTrue(mAlgeMover.run(()->mAlgeMover.setRotateSpeed(-1)))
       .onFalse(mAlgeMover.run(()->mAlgeMover.setRotateSpeed(0)));
-    stick2.povUp()
+
+    //Swifty Elevator   
+    
+     stick2.povUp()
       .onTrue(mElevator.MoveUp(1))
       .onFalse(mElevator.MoveUp(0));
     stick2.povDown()
       .onTrue(mElevator.MoveDown(-1))
       .onFalse(mElevator.MoveDown(0));
-    //Swifty Elevator
   }
   public void defineCommands(){
     //Adds a tab to the Shuffleboard based off the SmartDashBoard

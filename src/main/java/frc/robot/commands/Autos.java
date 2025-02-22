@@ -39,6 +39,7 @@ public final class Autos {
     public static Command kRunonceExample(AlgeMover kMoo){ //REMOVE -- DO NOT COMMENT OUT....
       return kMoo.run(()->kMoo.setMoverSpeed(1));
     }
+    //nick is not abused, just well used
   private Autos() {
     throw new UnsupportedOperationException("This is a utility class!");
   }
