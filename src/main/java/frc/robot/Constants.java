@@ -45,12 +45,6 @@ public final class Constants {
   public static class elevatorConstants{ // Kenny's Arm Constants -- Static cause they never change
     public static final int kLiftMotorId = 13;
     public static final int kLiftMotor2ID = 28;
-    public static final int KLiftEncoderId1 = 0;
-    public static final int KLiftEncoderId2 = 2;
-    public static final double kP = 0.33;
-    public static final double kI = 0.15;
-    public static final double kD = 0.05;
-    public static final double cirumfrenceInfeet = 0.0218166;
   }
   public static class GettinSwervy{
     public static final double maximumSpeed = Units.feetToMeters(4.5);
