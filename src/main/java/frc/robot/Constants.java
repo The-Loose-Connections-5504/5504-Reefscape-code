@@ -20,30 +20,30 @@ public final class Constants {
   public static class OperatorConstants { // Operate constants/Players
     public static final int mainDriverPort = 0;
     public static final int secondDriverPort = 1;
-    public static final int iKennyArmRotaterID = 6;
-    public static final int iKoralFeederID = 7;
+    public static final int iKennyArmRotaterID = 15;
+    public static final int iKoralFeederID = 16;
   
   }
   public static class DriveTrainMotorIDs{ // OLD DRIVETRAIN Constants -- They Never Change so it's static
-    public static final int leftFrontWheelID  = 0;
-    public static final int rightFrontWheelID  = 1;
-    public static final int leftBackWheelID  = 2;
-    public static final int rightBackWheelID  = 3;
+    public static final int leftFrontWheelID  = 30;
+    public static final int rightFrontWheelID  = 31;
+    public static final int leftBackWheelID  = 32;
+    public static final int rightBackWheelID  = 33;
   }
 
   public static class AlgeMoverConstants{ // AlgeMover Constants -- They Never Change so it's static
-    public static final int algaeMoverID = 5;
-    public static final int algaeRotater =8;
+    public static final int algaeMoverID = 17;
+    public static final int algaeRotater = 18;
   }
   public static class BargeLiftConstants{ // BargeLift Constants -- They Never Change so it's static
-    public static final int bargeLiftID = 4;
+    public static final int bargeLiftID = 14;
   }
   public static class KennysArmConstants{ // Kenny's Arm Constants -- Static cause they never change
-    public static final int iKennyArmRotaterID = 6;
-    public static final int iKoralFeederID = 7;
+    public static final int iKennyArmRotaterID = 20;
+    public static final int iKoralFeederID = 21;
   }
   public static class elevatorConstants{ // Kenny's Arm Constants -- Static cause they never change
-    public static final int kLiftMotorId = 11;
+    public static final int kLiftMotorId = 13;
     public static final int KLiftEncoderId1 = 0;
     public static final int KLiftEncoderId2 = 2;
     public static final double kP = 0.33;
