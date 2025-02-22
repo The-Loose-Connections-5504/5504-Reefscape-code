@@ -29,6 +29,7 @@ public class DriveTrain extends SubsystemBase {
   
   /** Creates a new DriveTrain. */
   public DriveTrain() {
+    System.out.println("DO NOT RUN DRIVETRAIN SUBSYSTEM UNLESS NEEDED");
     Config.inverted(true);
     frontRight.configure(Config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     backRight.configure(Config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
@@ -40,7 +41,6 @@ public class DriveTrain extends SubsystemBase {
   }
   @Override
   public void periodic() {
-    SmartDashboard.putNumber("Motor Speeds", frontLeft.get());
     // This method will be called once per scheduler run
   }
 }

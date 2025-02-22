@@ -38,8 +38,6 @@ public class ElevatorSubsystem extends SubsystemBase {
   }
   @Override
   public void periodic() {
-    double Variable = m_encoder.getPosition() * ticks2meters;
-    System.out.println(Variable);
     // This method will be called once per scheduler run
   }
 }
