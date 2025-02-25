@@ -7,7 +7,6 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.subsystems.AlgeMover;
 import frc.robot.subsystems.DriveTrain;
-import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.KennysArm;
 //duh i'm cool or
 public final class Autos {
