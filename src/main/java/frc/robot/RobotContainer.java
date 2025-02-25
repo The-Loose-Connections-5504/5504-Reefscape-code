@@ -53,6 +53,7 @@ public class RobotContainer {
   double scaledDeadZoneX;
   double scaledDeadZoneY;
   double scaledDeadZoneTwist;
+  double ElevatorHeight;
 
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
@@ -152,15 +153,18 @@ public class RobotContainer {
     stick2.y()
       .onTrue(mAlgeMover.run(()->mAlgeMover.setRotateSpeed(-1)))
       .onFalse(mAlgeMover.run(()->mAlgeMover.setRotateSpeed(0)));
-
-    //Swifty Elevator   
-    
-     stick2.povUp()
-      .onTrue(mElevator.MoveUp(1))
-      .onFalse(mElevator.MoveUp(0));
+      //Swifty Elevator 
+    stick2.povUp() //POV == Dpad
+      .onTrue(mElevator.run(()-> mElevator.setSpeed(0.5)).until(()-> ElevatorHeight <= 2000))
+      .onFalse(mElevator.run(()-> mElevator.setSpeed(0)));
     stick2.povDown()
-      .onTrue(mElevator.MoveDown(-1))
-      .onFalse(mElevator.MoveDown(0));
+      .onTrue(mElevator.run(()-> mElevator.setSpeed(-0.5)).until(()-> ElevatorHeight >= 0))
+      .onFalse(mElevator.run(()-> mElevator.setSpeed(0)));  
+    if (stick2.povUp().getAsBoolean() == true  & ElevatorHeight <=2000) {
+      ElevatorHeight += 0.02; 
+    }
+    if (stick2.povDown().getAsBoolean() == true & ElevatorHeight >=0);
+    { ElevatorHeight -= 0.02;}
   }
   public void defineCommands(){
     //Adds a tab to the Shuffleboard based off the SmartDashBoard
