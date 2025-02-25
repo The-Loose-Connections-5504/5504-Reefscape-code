@@ -10,6 +10,7 @@ import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.KennysArm;
 //duh i'm cool or
 public final class Autos {
+  // OLD COMMANDS, USE ONLY IN EMERGENCIES
   /** Example static factory for an autonomous command. */
   // the (DriveTrin DriveTain) is adding a requirment to the function. - More can be added by adding a , 
   public static  Command kDriveForwardForTwoSeconds(DriveTrain DriveTrain){ // Simple Auto -- Keep

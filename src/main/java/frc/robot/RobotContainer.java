@@ -4,10 +4,8 @@
 //RUN "Git pull" in TERMINAL TO SEE IF CHANGES ARE MADE TO THE CODE, WHICH THEY HAVE BEEN MOST LIKELY
 package frc.robot;
 //Imports the things used in the code
-import frc.robot.commands.Autos;
 import frc.robot.subsystems.AlgeMover;
 import frc.robot.subsystems.BargeLift;
-import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.KennysArm;
 import frc.robot.subsystems.SwerveSubsytem;
@@ -31,15 +29,12 @@ public class RobotContainer {
   private  final CommandXboxController stick1 = new CommandXboxController(Constants.OperatorConstants.mainDriverPort);
   private  final CommandXboxController stick2 = new CommandXboxController(Constants.OperatorConstants.secondDriverPort);
   // The robot's subsystems and commands are defined here...
-  private final DriveTrain mdrive = new DriveTrain();
   private final BargeLift mBargeLift = new BargeLift();
   private final KennysArm mKennysArm = new KennysArm();
   private final AlgeMover mAlgeMover = new AlgeMover();
   private final ElevatorSubsystem mElevator = new ElevatorSubsystem();
   private final SwerveSubsytem SwervyDrive = new SwerveSubsytem();
-  private final Command kTest = Autos.goofySpeeds(mdrive);
-  private final Command kDriveForward = Autos.kDriveForwardForTwoSeconds(mdrive);
-  private final Command kMotorTest = Autos.motorTest(mKennysArm);
+
   //The Auton Chooser is defined here...
   private final SendableChooser<Command> kChooser = new SendableChooser<>();
   //Values for throttle 
@@ -170,9 +165,7 @@ public class RobotContainer {
     //Adds a tab to the Shuffleboard based off the SmartDashBoard
     Shuffleboard.getTab("Autonomous").add(kChooser);
     //Adds the options for the commands created in Autos.java
-    kChooser.addOption("Drive Forward for Two Seconds", kDriveForward);
-    kChooser.addOption("goofySpeeds", kTest);
-    kChooser.addOption("MotorTest", kMotorTest);
+    
   }
   SwerveInputStream kSwerveAngleSpeed = SwerveInputStream.of(SwervyDrive.getSwerveDrive(), 
                                                             ()-> scaledDeadZoneY * throttle,
