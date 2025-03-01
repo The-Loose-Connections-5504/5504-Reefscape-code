@@ -188,7 +188,7 @@ public class RobotContainer {
     //Kenny's Arm - Player 2
     stick2.rightBumper()
       .onTrue(mKennysArm.run(()->mKennysArm.rotateArm(.5)))
-      .onTrue(mKennysArm.run(()->mKennysArm.rotateArm(0)));
+      .onFalse(mKennysArm.run(()->mKennysArm.rotateArm(0)));
     stick2.leftBumper()
       .onTrue(mKennysArm.run(()->mKennysArm.rotateArm(-.5)))
       .onFalse(mKennysArm.run(()->mKennysArm.rotateArm(0)));
