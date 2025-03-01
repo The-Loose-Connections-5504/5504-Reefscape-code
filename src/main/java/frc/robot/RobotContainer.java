@@ -8,14 +8,34 @@ import frc.robot.subsystems.AlgeMover;
 import frc.robot.subsystems.BargeLift;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.KennysArm;
-import frc.robot.subsystems.SwerveSubsytem;
-import swervelib.SwerveInputStream;
+
+
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 //Legit No difference from a CommandJoystick, just has the id's already set for a XBOX controller
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+
+
+//CTRE
+
+import static edu.wpi.first.units.Units.*;
+
+import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
+import com.ctre.phoenix6.swerve.SwerveRequest;
+
+import com.pathplanner.lib.auto.AutoBuilder;
+
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
+
+import frc.robot.generated.TunerConstants;
+import frc.robot.subsystems.CommandSwerveDrivetrain;
 // 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -33,10 +53,31 @@ public class RobotContainer {
   private final KennysArm mKennysArm = new KennysArm();
   private final AlgeMover mAlgeMover = new AlgeMover();
   private final ElevatorSubsystem mElevator = new ElevatorSubsystem();
-  private final SwerveSubsytem SwervyDrive = new SwerveSubsytem();
-
   //The Auton Chooser is defined here...
   private final SendableChooser<Command> kChooser = new SendableChooser<>();
+
+//CTRE
+  private double MaxSpeed = TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
+  private double MaxAngularRate = RotationsPerSecond.of(0.75).in(RadiansPerSecond); // 3/4 of a rotation per second max angular velocity
+
+  /* Setting up bindings for necessary control of the swerve drive platform */
+  private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
+          .withDeadband(MaxSpeed * 0.1).withRotationalDeadband(MaxAngularRate * 0.1) // Add a 10% deadband
+          .withDriveRequestType(DriveRequestType.OpenLoopVoltage); // Use open-loop control for drive motors
+  private final SwerveRequest.SwerveDriveBrake brake = new SwerveRequest.SwerveDriveBrake();
+  private final SwerveRequest.PointWheelsAt point = new SwerveRequest.PointWheelsAt();
+  private final SwerveRequest.RobotCentric forwardStraight = new SwerveRequest.RobotCentric()
+          .withDriveRequestType(DriveRequestType.OpenLoopVoltage);
+
+  private final Telemetry logger = new Telemetry(MaxSpeed);
+
+  public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
+
+  /* Path follower */
+
+
+
+
   //Values for throttle 
   double threshHoldY = 0.15;
   double threshHoldX = 0.15;
@@ -49,6 +90,13 @@ public class RobotContainer {
   double scaledDeadZoneY;
   double scaledDeadZoneTwist;
   double ElevatorHeight;
+
+
+  //CTRE
+
+
+  /* Path follower */
+  private final SendableChooser<Command> autoChooser;
 
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
@@ -102,6 +150,17 @@ public class RobotContainer {
       }
 
   //Hopefully deadband and Throttle functions as intended cause i pasted the original.. :P
+
+
+
+
+  //CTRE STUFF == DO NOT MESS WITH
+  autoChooser = AutoBuilder.buildAutoChooser("Tests");
+  SmartDashboard.putData("Auto Mode", kChooser);
+
+  configureBindings();
+
+
   }
 
   /**
@@ -115,7 +174,6 @@ public class RobotContainer {
    */
   private void configureBindings() {
     //this cluster of a line controls the driving- currently doesn't have throttle- will fix ASAP
-    SwervyDrive.setDefaultCommand(DriveFieldOrientatedAngleSpeed);
 
     //Button Inputs  and ()-> is required
     //Quinton' BargeLift - Player 1
@@ -160,24 +218,44 @@ public class RobotContainer {
     }
     if (stick2.povDown().getAsBoolean() == true & ElevatorHeight >=0);
     { ElevatorHeight -= 0.02;}
+
+    //DRIVING
+    drivetrain.setDefaultCommand(
+            // Drivetrain will execute this command periodically
+            drivetrain.applyRequest(() ->
+                drive.withVelocityX(-stick1.getLeftY() * MaxSpeed) // Drive forward with negative Y (forward)
+                    .withVelocityY(-stick1.getLeftX() * MaxSpeed) // Drive left with negative X (left)
+                    .withRotationalRate(-stick1.getRightX() * MaxAngularRate) // Drive counterclockwise with negative X (left)
+            )
+        );
+    stick1.a().whileTrue(drivetrain.applyRequest(() -> brake));
+    stick1.b().whileTrue(drivetrain.applyRequest(() ->
+            point.withModuleDirection(new Rotation2d(-stick1.getLeftY(), -stick1.getLeftX()))
+        ));
+
+    stick1.pov(0).whileTrue(drivetrain.applyRequest(() ->
+            forwardStraight.withVelocityX(0.5).withVelocityY(0))
+        );
+    stick1.pov(180).whileTrue(drivetrain.applyRequest(() ->
+            forwardStraight.withVelocityX(-0.5).withVelocityY(0))
+        );
+       
+    stick1.back().and(stick1.y()).whileTrue(drivetrain.sysIdDynamic(Direction.kForward));
+    stick1.back().and(stick1.x()).whileTrue(drivetrain.sysIdDynamic(Direction.kReverse));
+    stick1.start().and(stick1.y()).whileTrue(drivetrain.sysIdQuasistatic(Direction.kForward));
+    stick1.start().and(stick1.x()).whileTrue(drivetrain.sysIdQuasistatic(Direction.kReverse));
+    stick1.leftBumper().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldCentric()));
+
+        drivetrain.registerTelemetry(logger::telemeterize);
+
   }
   public void defineCommands(){
     //Adds a tab to the Shuffleboard based off the SmartDashBoard
-    Shuffleboard.getTab("Autonomous").add(kChooser);
+    
     //Adds the options for the commands created in Autos.java
     
   }
-  SwerveInputStream kSwerveAngleSpeed = SwerveInputStream.of(SwervyDrive.getSwerveDrive(), 
-                                                            ()-> scaledDeadZoneY * throttle,
-                                                            ()-> scaledDeadZoneX * throttle).withControllerRotationAxis(()-> scaledDeadZoneTwist * throttle)
-                                                            .deadband(0.15)
-                                                            .scaleTranslation(0.8)
-                                                            .allianceRelativeControl(false);
-
-  SwerveInputStream kDriveDirectAngle = kSwerveAngleSpeed.copy().withControllerHeadingAxis(()-> scaledDeadZoneTwist * throttle, stick1::getRightY).headingWhile(true);
   //Getting the Angle and Speed 
-  Command driveFieldOrientatedDirect = SwervyDrive.driveFieldOriented(kDriveDirectAngle);
-  Command DriveFieldOrientatedAngleSpeed = SwervyDrive.driveFieldOriented(kSwerveAngleSpeed);
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
    *
