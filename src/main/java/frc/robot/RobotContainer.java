@@ -9,8 +9,6 @@ import frc.robot.subsystems.BargeLift;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.KennysArm;
 
-
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 //Legit No difference from a CommandJoystick, just has the id's already set for a XBOX controller
@@ -51,8 +49,6 @@ public class RobotContainer {
   private final AlgeMover mAlgeMover = new AlgeMover();
   private final ElevatorSubsystem mElevator = new ElevatorSubsystem();
   //The Auton Chooser is defined here...
-  private final SendableChooser<Command> kChooser = new SendableChooser<>();
-
 //CTRE
   private double MaxSpeed = TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
   private double MaxAngularRate = RotationsPerSecond.of(0.75).in(RadiansPerSecond); // 3/4 of a rotation per second max angular velocity
@@ -93,17 +89,13 @@ public class RobotContainer {
 
 
   /* Path follower */
-  private final SendableChooser<Command> autoChooser;
+  private final SendableChooser<Command> kChooser;
 
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
-    
-    // Configure the trigger bindings
-    configureBindings();
-    //Adds the commands to sendable chooser
-    defineCommands();
+  
     //Throttle --- cause the driver would kill me otherwise
     if ((stick1.getRawAxis(2) > threshHoldTrig1 || stick1.getRawAxis(2) < threshHoldTrig1) && !(throttle < 0))
 		{
@@ -152,11 +144,10 @@ public class RobotContainer {
 
 
   //CTRE STUFF == DO NOT MESS WITH
-  autoChooser = kChooser;
+  kChooser  = AutoBuilder.buildAutoChooser("Drive in a curvyLine");
   SmartDashboard.putData("Auto Mode", kChooser);
-
   configureBindings();
-
+  defineCommands();
 
   }
 
