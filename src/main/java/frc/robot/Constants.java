@@ -40,7 +40,7 @@ public final class Constants {
   }
   public static class KennysArmConstants{ // Kenny's Arm Constants -- Static cause they never change
     public static final int iKennyArmRotaterID = 4 ;
-    public static final int iKoralFeederID = 1
+    public static final int iKoralFeederID = 1;
   }
   public static class elevatorConstants{ // Kenny's Arm Constants -- Static cause they never change
     public static final int kLiftMotorId = 3;
