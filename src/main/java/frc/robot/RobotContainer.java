@@ -192,11 +192,11 @@ public class RobotContainer {
     stick2.povDown()
       .onTrue(mElevator.run(()-> mElevator.setSpeed(0.5)).until(()-> ElevatorHeight >= 0))
       .onFalse(mElevator.run(()-> mElevator.setSpeed(0)));  
-    if (stick2.povUp().getAsBoolean() == true  & ElevatorHeight <=2000) {
+    /*if (stick2.povUp().getAsBoolean() == true  & ElevatorHeight <=2000) {
       ElevatorHeight += 0.02; 
     }
     if (stick2.povDown().getAsBoolean() == true & ElevatorHeight >=0);
-    { ElevatorHeight -= 0.02;}
+    { ElevatorHeight -= 0.02;}*/
 
     //DRIVING
     drivetrain.setDefaultCommand(
