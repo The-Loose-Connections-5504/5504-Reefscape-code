@@ -24,6 +24,7 @@ import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -55,7 +56,7 @@ public class RobotContainer {
 
   /* Setting up bindings for necessary control of the swerve drive platform */
   private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
-          .withDeadband(MaxSpeed * 0.1).withRotationalDeadband(MaxAngularRate * 0.1) // Add a 10% deadband
+          .withDeadband(MaxSpeed * 0.2).withRotationalDeadband(MaxAngularRate * 0.2) // Add a 10% deadband
           .withDriveRequestType(DriveRequestType.OpenLoopVoltage); // Use open-loop control for drive motors
   private final SwerveRequest.SwerveDriveBrake brake = new SwerveRequest.SwerveDriveBrake();
   private final SwerveRequest.PointWheelsAt point = new SwerveRequest.PointWheelsAt();
@@ -143,8 +144,13 @@ public class RobotContainer {
 
 
 
-  //CTRE STUFF == DO NOT MESS WITH
-  kChooser  = AutoBuilder.buildAutoChooser("Drive in a curvyLine");
+  //PathPlanner == DO NOT MESS WITH
+  //NAMED COMMANDS AND EVENT MARKERS NEED TO BE REGISTERED BEFORE AutoBuilder is built
+
+  NamedCommands.registerCommand("elevatorMoveUp", mElevator.run(()->mElevator.setSpeed(.5)).withTimeout(1));
+  NamedCommands.registerCommand("KennyArmMoveUp", mKennysArm.run(()->mKennysArm.rotateArm(.5)).withTimeout(1));
+  NamedCommands.registerCommand("kennyArmShoot", mKennysArm.run(()->mKennysArm.intake(.5)).withTimeout(2));
+  kChooser  = AutoBuilder.buildAutoChooser("Drive in a Straight Line");
   SmartDashboard.putData("Auto Mode", kChooser);
   configureBindings();
   defineCommands();
@@ -152,7 +158,7 @@ public class RobotContainer {
   }
 
   /**
-   * Use this method to define your trigger->command mappings. Triggers can be created via the
+   * Use this method to define your trigger->command mappings. Triggers can be created via thes
    * {@link Trigger#Trigger(java.util.function.BooleanSupplier)} constructor with an arbitrary
    * predicate, or via the named factories in {@link
    * edu.wpi.first.wpilibj2.command.button.CommandGenericHID}'s subclasses for {@link
@@ -175,31 +181,22 @@ public class RobotContainer {
 
     //Kenny's Arm - Player 2
     stick2.rightBumper()
-      .onTrue(mKennysArm.run(()->mKennysArm.rotateArm(.5)))
+      .onTrue(mKennysArm.run(()->mKennysArm.rotateArm(-.25)))
       .onFalse(mKennysArm.run(()->mKennysArm.rotateArm(0)));
     stick2.leftBumper()
-      .onTrue(mKennysArm.run(()->mKennysArm.rotateArm(-.5)))
+      .onTrue(mKennysArm.run(()->mKennysArm.rotateArm(.25)))
       .onFalse(mKennysArm.run(()->mKennysArm.rotateArm(0)));
     stick2.a()
       .onTrue(mKennysArm.run(()->mKennysArm.intake(-.5)))
       .onFalse(mKennysArm.run(()->mKennysArm.intake(0)));
 
     //Carsen and Nickolas' AlgeMover - Player 2
-    stick2.b()
-      .onTrue(mAlgeMover.run(()->mAlgeMover.setMoverSpeed(.5)))
-      .onFalse(mAlgeMover.run(()->mAlgeMover.setMoverSpeed(0)));
-    stick2.x()
-      .onTrue(mAlgeMover.run(()->mAlgeMover.setRotateSpeed(.5)))
-      .onFalse(mAlgeMover.run(()->mAlgeMover.setRotateSpeed(0)));
-    stick2.y()
-      .onTrue(mAlgeMover.run(()->mAlgeMover.setRotateSpeed(-.5)))
-      .onFalse(mAlgeMover.run(()->mAlgeMover.setRotateSpeed(0)));
       //Swifty Elevator 
     stick2.povUp() //POV == Dpad
-      .onTrue(mElevator.run(()-> mElevator.setSpeed(0.5)).until(()-> ElevatorHeight <= 2000))
+      .onTrue(mElevator.run(()-> mElevator.setSpeed(-0.5)).until(()-> ElevatorHeight <= 2000))
       .onFalse(mElevator.run(()-> mElevator.setSpeed(0)));
     stick2.povDown()
-      .onTrue(mElevator.run(()-> mElevator.setSpeed(-0.5)).until(()-> ElevatorHeight >= 0))
+      .onTrue(mElevator.run(()-> mElevator.setSpeed(0.5)).until(()-> ElevatorHeight >= 0))
       .onFalse(mElevator.run(()-> mElevator.setSpeed(0)));  
     if (stick2.povUp().getAsBoolean() == true  & ElevatorHeight <=2000) {
       ElevatorHeight += 0.02; 
@@ -211,15 +208,13 @@ public class RobotContainer {
     drivetrain.setDefaultCommand(
             // Drivetrain will execute this command periodically
             drivetrain.applyRequest(() ->
-                drive.withVelocityX(-stick1.getLeftY() * MaxSpeed) // Drive forward with negative Y (forward)
-                    .withVelocityY(-stick1.getLeftX() * MaxSpeed) // Drive left with negative X (left)
-                    .withRotationalRate(-stick1.getRightX() * MaxAngularRate) // Drive counterclockwise with negative X (left)
+                drive.withVelocityX(scaledDeadZoneY *throttle * MaxSpeed) // Drive forward with negative Y (forward)
+                    .withVelocityY(-scaledDeadZoneX *throttle * MaxSpeed) // Drive left with negative X (left)
+                    .withRotationalRate(-scaledDeadZoneTwist * throttle * MaxAngularRate) // Drive counterclockwise with negative X (left)
             )
         );
     stick1.a().whileTrue(drivetrain.applyRequest(() -> brake));
-    stick1.b().whileTrue(drivetrain.applyRequest(() ->
-            point.withModuleDirection(new Rotation2d(-stick1.getLeftY(), -stick1.getLeftX()))
-        ));
+
 
     stick1.pov(0).whileTrue(drivetrain.applyRequest(() ->
             forwardStraight.withVelocityX(0.5).withVelocityY(0))
@@ -228,10 +223,6 @@ public class RobotContainer {
             forwardStraight.withVelocityX(-0.5).withVelocityY(0))
         );
        
-    stick1.back().and(stick1.y()).whileTrue(drivetrain.sysIdDynamic(Direction.kForward));
-    stick1.back().and(stick1.x()).whileTrue(drivetrain.sysIdDynamic(Direction.kReverse));
-    stick1.start().and(stick1.y()).whileTrue(drivetrain.sysIdQuasistatic(Direction.kForward));
-    stick1.start().and(stick1.x()).whileTrue(drivetrain.sysIdQuasistatic(Direction.kReverse));
     stick1.leftBumper().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldCentric()));
 
         drivetrain.registerTelemetry(logger::telemeterize);
@@ -250,6 +241,7 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
+    // An example command will be run in autonomous
     return kChooser.getSelected();
   }
 }
