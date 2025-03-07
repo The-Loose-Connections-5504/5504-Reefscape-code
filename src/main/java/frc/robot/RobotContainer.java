@@ -148,8 +148,11 @@ public class RobotContainer {
   //NAMED COMMANDS AND EVENT MARKERS NEED TO BE REGISTERED BEFORE AutoBuilder is built
 
   NamedCommands.registerCommand("elevatorMoveUp", mElevator.run(()->mElevator.setSpeed(.5)).withTimeout(1));
+  NamedCommands.registerCommand("elevatorShut", mElevator.run(()->mElevator.setSpeed(.0)).withTimeout(2));
   NamedCommands.registerCommand("KennyArmMoveUp", mKennysArm.run(()->mKennysArm.rotateArm(.5)).withTimeout(1));
-  NamedCommands.registerCommand("kennyArmShoot", mKennysArm.run(()->mKennysArm.intake(.6)).withTimeout(2));
+  NamedCommands.registerCommand("kennyArmShoot", mKennysArm.run(()->mKennysArm.intake(.6)).withTimeout(1.5));
+  NamedCommands.registerCommand("KennyArmShutOff", mKennysArm.run(()->mKennysArm.rotateArm(0)).withTimeout(1));
+  NamedCommands.registerCommand("KennyArmShutOff", mKennysArm.run(()->mKennysArm.intake(0)).withTimeout(1));
   kChooser  = AutoBuilder.buildAutoChooser("Drive in a Straight Line");
   SmartDashboard.putData("Auto Mode", kChooser);
   configureBindings();

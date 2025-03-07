@@ -4,6 +4,10 @@
 
 package frc.robot.subsystems;
 import com.revrobotics.spark.SparkMax;
+import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
+import com.revrobotics.spark.config.SparkMaxConfig;
+import com.revrobotics.spark.SparkBase.PersistMode;
+import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -12,10 +16,15 @@ import frc.robot.Constants;
 public class ElevatorSubsystem extends SubsystemBase {
   //defines objects
   private final SparkMax m_motor = new SparkMax(Constants.elevatorConstants.kLiftMotorId, MotorType.kBrushless);
+  private final SparkMaxConfig elevatSparkMaxConfig = new SparkMaxConfig();
   // CHANGE PID VALUES IN CONSTANTS IF NEEDED
   //Assuming this is roughly correct -- might change IF NEEDED.  
   /** Creates a new ElevatorSubsystem. */
   public ElevatorSubsystem() {
+    elevatSparkMaxConfig.idleMode(IdleMode.kBrake);
+    //I don't know what the hell this voltage  does but it's here and it might work sooo.......
+    
+    m_motor.configure(elevatSparkMaxConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
   }
 // Gets meters based off current position of Encoder
   public void setSpeed(double Speed){
