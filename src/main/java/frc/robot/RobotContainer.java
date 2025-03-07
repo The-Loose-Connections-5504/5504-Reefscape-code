@@ -174,7 +174,7 @@ public class RobotContainer {
       .onFalse(mBargeLift.run(()->mBargeLift.powerBarge(0)));
     //Kenny's Arm - Player 2
     stick2.rightBumper()
-      .onTrue(mKennysArm.run(()->mKennysArm.rotateArm(-.25)))
+      .onTrue(mKennysArm.run(()->mKennysArm.rotateArm(-0.25)))
       .onFalse(mKennysArm.run(()->mKennysArm.rotateArm(0)));
     stick2.leftBumper()
       .onTrue(mKennysArm.run(()->mKennysArm.rotateArm(.25)))
