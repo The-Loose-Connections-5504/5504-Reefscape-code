@@ -82,7 +82,7 @@ public class RobotContainer {
   double scaledDeadZoneX;
   double scaledDeadZoneY;
   double scaledDeadZoneTwist;
-  double ElevatorHeight;
+  double ElevatorHeight = 0;
 
 
   //CTRE
@@ -139,23 +139,15 @@ public class RobotContainer {
       }
 
   //Hopefully deadband and Throttle functions as intended cause i pasted the original.. :P
-      System.out.println(ElevatorHeight);
 
 
 
   //PathPlanner == DO NOT MESS WITH
   //NAMED COMMANDS AND EVENT MARKERS NEED TO BE REGISTERED BEFORE AutoBuilder is built
-
-  NamedCommands.registerCommand("elevatorMoveUp", mElevator.run(()->mElevator.setSpeed(.5)).withTimeout(1));
-  NamedCommands.registerCommand("elevatorShut", mElevator.run(()->mElevator.setSpeed(.0)).withTimeout(2));
-  NamedCommands.registerCommand("KennyArmMoveUp", mKennysArm.run(()->mKennysArm.rotateArm(.5)).withTimeout(1));
-  NamedCommands.registerCommand("kennyArmShoot", mKennysArm.run(()->mKennysArm.intake(.6)).withTimeout(1.5));
-  NamedCommands.registerCommand("KennyArmShutOff", mKennysArm.run(()->mKennysArm.rotateArm(0)).withTimeout(2));
-  NamedCommands.registerCommand("KennyArmIntakeShutOff", mKennysArm.run(()->mKennysArm.intake(0)).withTimeout(2));
+  configureBindings();
+  defineCommands(); //Named Commands all go in that function - which gets called while this is running so...
   kChooser  = AutoBuilder.buildAutoChooser("Drive in a Straight Line");
   SmartDashboard.putData("Auto Mode", kChooser);
-  configureBindings();
-  defineCommands();
 
   }
 
@@ -173,7 +165,7 @@ public class RobotContainer {
 
     //Button Inputs  and ()-> is required
     //Quinton' BargeLift - Player 1
-      stick1.x()
+    stick1.x()
       .onTrue(mBargeLift.run(()->mBargeLift.powerBarge(0.5)))
       .onFalse(mBargeLift.run(()->mBargeLift.powerBarge(0)));
 
@@ -230,9 +222,12 @@ public class RobotContainer {
 
   }
   public void defineCommands(){
-    //Adds a tab to the Shuffleboard based off the SmartDashBoard
-    
-    //Adds the options for the commands created in Autos.java
+    NamedCommands.registerCommand("elevatorMoveUp", mElevator.run(()->mElevator.setSpeed(.5)).withTimeout(1));
+    NamedCommands.registerCommand("elevatorShut", mElevator.run(()->mElevator.setSpeed(.0)).withTimeout(2));
+    NamedCommands.registerCommand("KennyArmMoveUp", mKennysArm.run(()->mKennysArm.rotateArm(.5)).withTimeout(1));
+    NamedCommands.registerCommand("kennyArmShoot", mKennysArm.run(()->mKennysArm.intake(.6)).withTimeout(1.5));
+    NamedCommands.registerCommand("KennyArmShutOff", mKennysArm.run(()->mKennysArm.rotateArm(0)).withTimeout(2));
+    NamedCommands.registerCommand("KennyArmIntakeShutOff", mKennysArm.run(()->mKennysArm.intake(0)).withTimeout(2));
     
   }
   //Getting the Angle and Speed 
