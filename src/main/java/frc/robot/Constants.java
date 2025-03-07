@@ -36,14 +36,14 @@ public final class Constants {
     public static final int algaeRotater = 17;
   }
   public static class BargeLiftConstants{ // BargeLift Constants -- They Never Change so it's static
-    public static final int bargeLiftID = 16;
+    public static final int bargeLiftID = 2;
   }
   public static class KennysArmConstants{ // Kenny's Arm Constants -- Static cause they never change
-    public static final int iKennyArmRotaterID = 15;
-    public static final int iKoralFeederID = 14;
+    public static final int iKennyArmRotaterID = 4 ;
+    public static final int iKoralFeederID = 1
   }
   public static class elevatorConstants{ // Kenny's Arm Constants -- Static cause they never change
-    public static final int kLiftMotorId = 13;
+    public static final int kLiftMotorId = 3;
   }
   public static class GettinSwervy{
     public static final double maximumSpeed = Units.feetToMeters(4.5);

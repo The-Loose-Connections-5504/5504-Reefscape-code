@@ -6,29 +6,13 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.subsystems.AlgeMover;
-import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.KennysArm;
 //duh i'm cool or
 public final class Autos {
   // OLD COMMANDS, USE ONLY IN EMERGENCIES
   /** Example static factory for an autonomous command. */
   // the (DriveTrin DriveTain) is adding a requirment to the function. - More can be added by adding a , 
-  public static  Command kDriveForwardForTwoSeconds(DriveTrain DriveTrain){ // Simple Auto -- Keep
-    return Commands.sequence( //Sequenence:List of Commands to Run, Paralell:Runs all the commands at once
-      DriveTrain.run(()-> DriveTrain.drive(.5, 0, 0)).withTimeout(2),
-      //withTimeout() is the duration of a command/how long it lasts
-      DriveTrain.run(()-> DriveTrain.drive(0, 0, 0))
-    );
 
-  }
-  
-  public static Command goofySpeeds(DriveTrain DriveTrain){ //Test Command Write Over this -- DO NOT COMMENT OUT
-    return Commands.sequence(
-      DriveTrain.run(()-> DriveTrain.drive(.5, 0, 0)).withTimeout(2),
-      DriveTrain.run(()-> DriveTrain.drive(0, .5, 0)).withTimeout(5),
-      DriveTrain.run(()-> DriveTrain.drive(0, .0, 0)).withTimeout(10)
-    );
-  }
     public static Command motorTest(KennysArm kennysArm){ //Test Command - Write Over this -- DO NOT COMMENT OUT
       return Commands.sequence(
         kennysArm.run(()->kennysArm.rotateArm(1)).withTimeout(2),
