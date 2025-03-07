@@ -17,6 +17,12 @@
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "elevatorShut"
+          }
+        },
+        {
           "type": "sequential",
           "data": {
             "commands": [
@@ -45,12 +51,6 @@
                 }
               }
             ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "elevatorShut"
           }
         }
       ]
