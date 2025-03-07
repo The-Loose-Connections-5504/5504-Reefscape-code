@@ -173,14 +173,14 @@ public class RobotContainer {
 
     //Button Inputs  and ()-> is required
     //Quinton' BargeLift - Player 1
-    stick1.x()
+    /**stick1.x()
       .onTrue(mBargeLift.run(()->mBargeLift.powerBarge(.5)))
       .onFalse(mBargeLift.run(()->mBargeLift.powerBarge(0)));
 
     stick1.y()
       .onTrue(mBargeLift.run(()->mBargeLift.powerBarge(-.5)))
       .onFalse(mBargeLift.run(()->mBargeLift.powerBarge(0)));
-
+ */
     //Kenny's Arm - Player 2
     stick2.rightBumper()
       .onTrue(mKennysArm.run(()->mKennysArm.rotateArm(-.25)))
@@ -210,9 +210,9 @@ public class RobotContainer {
     drivetrain.setDefaultCommand(
             // Drivetrain will execute this command periodically
             drivetrain.applyRequest(() ->
-                drive.withVelocityX(scaledDeadZoneY *throttle * MaxSpeed) // Drive forward with negative Y (forward)
-                    .withVelocityY(-scaledDeadZoneX *throttle * MaxSpeed) // Drive left with negative X (left)
-                    .withRotationalRate(-scaledDeadZoneTwist * throttle * MaxAngularRate) // Drive counterclockwise with negative X (left)
+                drive.withVelocityX(-stick1.getLeftY()* MaxSpeed) // Drive forward with negative Y (forward)
+                    .withVelocityY(-stick1.getLeftX()  * MaxSpeed) // Drive left with negative X (left)
+                    .withRotationalRate(-stick1.getRightX() * MaxAngularRate) // Drive counterclockwise with negative X (left)
             )
         );
     stick1.a().whileTrue(drivetrain.applyRequest(() -> brake));

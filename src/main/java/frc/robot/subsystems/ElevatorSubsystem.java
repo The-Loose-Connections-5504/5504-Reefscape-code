@@ -21,10 +21,6 @@ public class ElevatorSubsystem extends SubsystemBase {
   //Assuming this is roughly correct -- might change IF NEEDED.  
   /** Creates a new ElevatorSubsystem. */
   public ElevatorSubsystem() {
-    elevatSparkMaxConfig.idleMode(IdleMode.kBrake);
-    //I don't know what the hell this voltage  does but it's here and it might work sooo.......
-    
-    m_motor.configure(elevatSparkMaxConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
   }
 // Gets meters based off current position of Encoder
   public void setSpeed(double Speed){
