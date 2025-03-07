@@ -178,10 +178,10 @@ public class RobotContainer {
       .onTrue(mKennysArm.run(()->mKennysArm.rotateArm(-0.25)))
       .onFalse(mKennysArm.run(()->mKennysArm.rotateArm(0)));
     stick2.leftBumper()
-      .onTrue(mKennysArm.run(()->mKennysArm.rotateArm(.25)))
+      .onTrue(mKennysArm.run(()->mKennysArm.rotateArm(0.25)))
       .onFalse(mKennysArm.run(()->mKennysArm.rotateArm(0)));
     stick2.a()
-      .onTrue(mKennysArm.run(()->mKennysArm.intake(-.5)))
+      .onTrue(mKennysArm.run(()->mKennysArm.intake(-0.5)))
       .onFalse(mKennysArm.run(()->mKennysArm.intake(0)));
 
     //Carsen and Nickolas' AlgeMover - Player 2
