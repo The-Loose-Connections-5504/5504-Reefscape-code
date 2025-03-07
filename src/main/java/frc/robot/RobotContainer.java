@@ -143,7 +143,8 @@ public class RobotContainer {
 
 
   //PathPlanner == DO NOT MESS WITH
-  //NAMED COMMANDS AND EVENT MARKERS NEED TO BE REGISTERED BEFORE AutoBuilder is built
+  //NAMED COMMANDS AND EVENT MARKERS NEED TO BE REGISTERED BEFORE AutoBuilder is made so HENCE why defineCommands are made there
+  //DO NOT TOUCH JAY!!!
   configureBindings();
   defineCommands(); //Named Commands all go in that function - which gets called while this is running so...
   kChooser  = AutoBuilder.buildAutoChooser("Drive in a Straight Line");
