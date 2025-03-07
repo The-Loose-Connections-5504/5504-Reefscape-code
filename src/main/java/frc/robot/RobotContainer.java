@@ -149,7 +149,7 @@ public class RobotContainer {
 
   NamedCommands.registerCommand("elevatorMoveUp", mElevator.run(()->mElevator.setSpeed(.5)).withTimeout(1));
   NamedCommands.registerCommand("KennyArmMoveUp", mKennysArm.run(()->mKennysArm.rotateArm(.5)).withTimeout(1));
-  NamedCommands.registerCommand("kennyArmShoot", mKennysArm.run(()->mKennysArm.intake(.5)).withTimeout(2));
+  NamedCommands.registerCommand("kennyArmShoot", mKennysArm.run(()->mKennysArm.intake(.6)).withTimeout(2));
   kChooser  = AutoBuilder.buildAutoChooser("Drive in a Straight Line");
   SmartDashboard.putData("Auto Mode", kChooser);
   configureBindings();
