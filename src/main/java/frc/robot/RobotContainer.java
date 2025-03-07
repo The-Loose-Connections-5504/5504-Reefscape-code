@@ -206,20 +206,29 @@ public class RobotContainer {
                     .withRotationalRate(-stick1.getRightX() * MaxAngularRate) // Drive counterclockwise with negative X (left)
             )
         );
-    stick1.a().whileTrue(drivetrain.applyRequest(() -> brake));
+        stick1.a().whileTrue(drivetrain.applyRequest(() -> brake));
+        stick1.b().whileTrue(drivetrain.applyRequest(() ->
+            point.withModuleDirection(new Rotation2d(-stick1.getLeftY(), -stick1.getLeftX()))
+        ));
 
-
-    stick1.pov(0).whileTrue(drivetrain.applyRequest(() ->
+        stick1.pov(0).whileTrue(drivetrain.applyRequest(() ->
             forwardStraight.withVelocityX(0.5).withVelocityY(0))
         );
-    stick1.pov(180).whileTrue(drivetrain.applyRequest(() ->
+        stick1.pov(180).whileTrue(drivetrain.applyRequest(() ->
             forwardStraight.withVelocityX(-0.5).withVelocityY(0))
         );
-       
-    stick1.leftBumper().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldCentric()));
+
+        // Run SysId routines when holding back/start and X/Y.
+        // Note that each routine should be run exactly once in a single log.
+        stick1.back().and(stick1.y()).whileTrue(drivetrain.sysIdDynamic(Direction.kForward));
+        stick1.back().and(stick1.x()).whileTrue(drivetrain.sysIdDynamic(Direction.kReverse));
+        stick1.start().and(stick1.y()).whileTrue(drivetrain.sysIdQuasistatic(Direction.kForward));
+        stick1.start().and(stick1.x()).whileTrue(drivetrain.sysIdQuasistatic(Direction.kReverse));
+
+        // reset the field-centric heading on left bumper press
+        stick1.leftBumper().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldCentric()));
 
         drivetrain.registerTelemetry(logger::telemeterize);
-
   }
   public void defineCommands(){
     NamedCommands.registerCommand("elevatorMoveUp", mElevator.run(()->mElevator.setSpeed(.5)).withTimeout(1));
