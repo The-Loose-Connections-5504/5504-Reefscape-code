@@ -47,7 +47,6 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final BargeLift mBargeLift = new BargeLift();
   private final KennysArm mKennysArm = new KennysArm();
-  private final AlgeMover mAlgeMover = new AlgeMover();
   private final ElevatorSubsystem mElevator = new ElevatorSubsystem();
   //The Auton Chooser is defined here...
 //CTRE
@@ -140,7 +139,7 @@ public class RobotContainer {
       }
 
   //Hopefully deadband and Throttle functions as intended cause i pasted the original.. :P
-
+      System.out.println(ElevatorHeight);
 
 
 

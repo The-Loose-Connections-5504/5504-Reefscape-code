@@ -5,25 +5,12 @@
 package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
-import frc.robot.subsystems.AlgeMover;
-import frc.robot.subsystems.KennysArm;
+
 //duh i'm cool or
 public final class Autos {
   // OLD COMMANDS, USE ONLY IN EMERGENCIES
   /** Example static factory for an autonomous command. */
   // the (DriveTrin DriveTain) is adding a requirment to the function. - More can be added by adding a , 
-
-    public static Command motorTest(KennysArm kennysArm){ //Test Command - Write Over this -- DO NOT COMMENT OUT
-      return Commands.sequence(
-        kennysArm.run(()->kennysArm.rotateArm(1)).withTimeout(2),
-        kennysArm.run(()->kennysArm.rotateArm(-1)).withTimeout(3),
-        kennysArm.run(()->kennysArm.rotateArm(1)).withTimeout(5),
-        kennysArm.run(()->kennysArm.rotateArm(0)).withTimeout(9)
-        );
-    }
-    public static Command kRunonceExample(AlgeMover kMoo){ //REMOVE -- DO NOT COMMENT OUT....
-      return kMoo.run(()->kMoo.setMoverSpeed(1));
-    }
     //nick is not abused, just well used -- Wise Words 
   private Autos() {
     throw new UnsupportedOperationException("This is a utility class!");
