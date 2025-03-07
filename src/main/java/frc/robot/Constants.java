@@ -4,7 +4,6 @@
 
 package frc.robot;
 
-import edu.wpi.first.math.util.Units;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
@@ -20,20 +19,6 @@ public final class Constants {
   public static class OperatorConstants { // Operate constants/Players
     public static final int mainDriverPort = 0;
     public static final int secondDriverPort = 1;
-    public static final int iKennyArmRotaterID = 24;
-    public static final int iKoralFeederID = 23;
-  
-  }
-  public static class DriveTrainMotorIDs{ // OLD DRIVETRAIN Constants -- They Never Change so it's static
-    public static final int leftFrontWheelID  = 22;
-    public static final int rightFrontWheelID  = 21;
-    public static final int leftBackWheelID  = 20;
-    public static final int rightBackWheelID  = 19;
-  }
-
-  public static class AlgeMoverConstants{ // AlgeMover Constants -- They Never Change so it's static
-    public static final int algaeMoverID = 18;
-    public static final int algaeRotater = 17;
   }
   public static class BargeLiftConstants{ // BargeLift Constants -- They Never Change so it's static
     public static final int bargeLiftID = 2;
@@ -44,8 +29,5 @@ public final class Constants {
   }
   public static class elevatorConstants{ // Kenny's Arm Constants -- Static cause they never change
     public static final int kLiftMotorId = 3;
-  }
-  public static class GettinSwervy{
-    public static final double maximumSpeed = Units.feetToMeters(4.5);
   }
 }

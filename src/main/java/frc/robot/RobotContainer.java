@@ -4,7 +4,7 @@
 //RUN "Git pull" in TERMINAL TO SEE IF CHANGES ARE MADE TO THE CODE, WHICH THEY HAVE BEEN MOST LIKELY
 package frc.robot;
 //Imports the things used in the code
-import frc.robot.subsystems.AlgeMover;
+
 import frc.robot.subsystems.BargeLift;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.KennysArm;
@@ -173,14 +173,13 @@ public class RobotContainer {
 
     //Button Inputs  and ()-> is required
     //Quinton' BargeLift - Player 1
-    /**stick1.x()
-      .onTrue(mBargeLift.run(()->mBargeLift.powerBarge(.5)))
+      stick1.x()
+      .onTrue(mBargeLift.run(()->mBargeLift.powerBarge(0.5)))
       .onFalse(mBargeLift.run(()->mBargeLift.powerBarge(0)));
 
     stick1.y()
-      .onTrue(mBargeLift.run(()->mBargeLift.powerBarge(-.5)))
+      .onTrue(mBargeLift.run(()->mBargeLift.powerBarge(-0.5)))
       .onFalse(mBargeLift.run(()->mBargeLift.powerBarge(0)));
- */
     //Kenny's Arm - Player 2
     stick2.rightBumper()
       .onTrue(mKennysArm.run(()->mKennysArm.rotateArm(-.25)))
