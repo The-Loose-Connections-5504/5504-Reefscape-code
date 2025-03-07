@@ -37,6 +37,12 @@
                 "data": {
                   "name": "KennyArmShutOff"
                 }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "KennyArmIntakeShutOff"
+                }
               }
             ]
           }
