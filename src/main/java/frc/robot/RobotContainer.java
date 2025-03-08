@@ -8,7 +8,7 @@ package frc.robot;
 import frc.robot.subsystems.BargeLift;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.KennysArm;
-
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 //Legit No difference from a CommandJoystick, just has the id's already set for a XBOX controller
@@ -97,46 +97,6 @@ public class RobotContainer {
   public RobotContainer() {
   
     //Throttle --- cause the driver would kill me otherwise
-    if ((stick1.getRawAxis(2) > threshHoldTrig1 || stick1.getRawAxis(2) < threshHoldTrig1) && !(throttle < 0))
-		{
-			throttle = (throttle - (stick1.getRawAxis(2)/30));
-		}
-
-		if ((stick1.getRawAxis(3) > threshHoldTrig2 || stick1.getRawAxis(3) < threshHoldTrig2) && !(throttle > 1))
-		{
-			throttle = (throttle + (stick1.getRawAxis(3)/30));
-		}
-    //Clean Up throttle Value
-    if(throttle > 1 || throttle < 0)
-		{
-			throttle = Math.round(throttle);
-		}
-
-    //Deadband 
-    if (stick1.getRawAxis(1) > threshHoldY || stick1.getRawAxis(1) < threshHoldY * -1) 
-		{
-			scaledDeadZoneY = stick1.getRawAxis(1);
-		}
-		  else 
-		  {
-			scaledDeadZoneY = 0;
-		}
-    if (stick1.getRawAxis(0) > threshHoldX || stick1.getRawAxis(0) < threshHoldX * -1)
-     {
-      scaledDeadZoneX = stick1.getRawAxis(0);
-      }
-      else 
-        {
-          scaledDeadZoneX = 0;
-        }
-    if (stick1.getRawAxis(4) > threshHoldZ || stick1.getRawAxis(4) < threshHoldZ * -1) 
-      {
-        scaledDeadZoneTwist = stick1.getRawAxis(4);
-      }
-      else 
-      {
-        scaledDeadZoneTwist = 0;
-      }
 
   //Hopefully deadband and Throttle functions as intended cause i pasted the original.. :P
 
@@ -146,7 +106,13 @@ public class RobotContainer {
   //NAMED COMMANDS AND EVENT MARKERS NEED TO BE REGISTERED BEFORE AutoBuilder is made so HENCE why defineCommands are made there
   //DO NOT TOUCH JAY!!!
   configureBindings();
-  defineCommands(); //Named Commands all go in that function - which gets called while this is running so...
+  defineCommands();
+  NamedCommands.registerCommand("elevatorMoveUp", mElevator.run(()->mElevator.setSpeed(.5)).withTimeout(1));
+  NamedCommands.registerCommand("elevatorShut", mElevator.run(()->mElevator.setSpeed(.0)).withTimeout(2));
+  NamedCommands.registerCommand("KennyArmMoveUp", mKennysArm.run(()->mKennysArm.rotateArm(.5)).withTimeout(1));
+  NamedCommands.registerCommand("kennyArmShoot", mKennysArm.run(()->mKennysArm.intake(.6)).withTimeout(1.5));
+  NamedCommands.registerCommand("KennyArmShutOff", mKennysArm.run(()->mKennysArm.rotateArm(0)).withTimeout(2));
+  NamedCommands.registerCommand("KennyArmIntakeShutOff", mKennysArm.run(()->mKennysArm.intake(0)).withTimeout(2));
   kChooser  = AutoBuilder.buildAutoChooser("Drive in a Straight Line");
   SmartDashboard.putData("Auto Mode", kChooser);
 
@@ -183,6 +149,9 @@ public class RobotContainer {
     stick2.a()
       .onTrue(mKennysArm.run(()->mKennysArm.intake(-0.5)))
       .onFalse(mKennysArm.run(()->mKennysArm.intake(0)));
+    stick2.b()
+      .onTrue(mKennysArm.run(()->mKennysArm.intake(0.5)))
+      .onFalse(mKennysArm.run(()->mKennysArm.intake(0)));
 
     //Carsen and Nickolas' AlgeMover - Player 2
       //Swifty Elevator 
@@ -202,8 +171,8 @@ public class RobotContainer {
     drivetrain.setDefaultCommand(
             // Drivetrain will execute this command periodically
             drivetrain.applyRequest(() ->
-                drive.withVelocityX(-stick1.getLeftY()* MaxSpeed) // Drive forward with negative Y (forward)
-                    .withVelocityY(-stick1.getLeftX()  * MaxSpeed) // Drive left with negative X (left)
+                drive.withVelocityX(-(stick1.getLeftY())* MaxSpeed) // Drive forward with negative Y (forward)
+                    .withVelocityY(-stick1.getLeftX() * MaxSpeed) // Drive left with negative X (left)
                     .withRotationalRate(-stick1.getRightX() * MaxAngularRate) // Drive counterclockwise with negative X (left)
             )
         );
@@ -230,15 +199,53 @@ public class RobotContainer {
         stick1.leftBumper().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldCentric()));
 
         drivetrain.registerTelemetry(logger::telemeterize);
+
+
+    if (DriverStation.isTeleopEnabled()){
+      if ((stick1.getLeftTriggerAxis() > threshHoldTrig1 || stick1.getLeftTriggerAxis() < threshHoldTrig1) && !(throttle < 0))
+		{
+			throttle = (throttle - (stick1.getLeftTriggerAxis()/30));
+		}
+
+		if ((stick1.getRightTriggerAxis() > threshHoldTrig2 || stick1.getRightTriggerAxis() < threshHoldTrig2) && !(throttle > 1))
+		{
+			throttle = (throttle + (stick1.getRightTriggerAxis()/30));
+		}
+    //Clean Up throttle Value
+    if(throttle > 1 || throttle < 0)
+		{
+			throttle = Math.round(throttle);
+		}
+
+    //Deadband 
+     if (stick1.getRawAxis(1) > threshHoldY || stick1.getRawAxis(1) < threshHoldY * -1) 
+		{
+			scaledDeadZoneY = stick1.getRawAxis(1);
+		}
+		  else 
+		  {
+			scaledDeadZoneY = 0;
+		}
+    if (stick1.getRawAxis(0) > threshHoldX || stick1.getRawAxis(0) < threshHoldX * -1)
+     {
+      scaledDeadZoneX = stick1.getRawAxis(0);
+      }
+      else 
+        {
+          scaledDeadZoneX = 0;
+        }
+    if (stick1.getRawAxis(4) > threshHoldZ || stick1.getRawAxis(4) < threshHoldZ * -1) 
+      {
+        scaledDeadZoneTwist = stick1.getRawAxis(4);
+      }
+      else 
+      {
+        scaledDeadZoneTwist = 0;
+      }
+    }
   }
   public void defineCommands(){
-    NamedCommands.registerCommand("elevatorMoveUp", mElevator.run(()->mElevator.setSpeed(.5)).withTimeout(1));
-    NamedCommands.registerCommand("elevatorShut", mElevator.run(()->mElevator.setSpeed(.0)).withTimeout(2));
-    NamedCommands.registerCommand("KennyArmMoveUp", mKennysArm.run(()->mKennysArm.rotateArm(.5)).withTimeout(1));
-    NamedCommands.registerCommand("kennyArmShoot", mKennysArm.run(()->mKennysArm.intake(.6)).withTimeout(1.5));
-    NamedCommands.registerCommand("KennyArmShutOff", mKennysArm.run(()->mKennysArm.rotateArm(0)).withTimeout(2));
-    NamedCommands.registerCommand("KennyArmIntakeShutOff", mKennysArm.run(()->mKennysArm.intake(0)).withTimeout(2));
-    
+
   }
   //Getting the Angle and Speed 
   /**
