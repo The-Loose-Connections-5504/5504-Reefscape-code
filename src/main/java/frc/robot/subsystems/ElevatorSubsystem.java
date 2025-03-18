@@ -22,27 +22,41 @@ public class ElevatorSubsystem extends SubsystemBase {
   private final SparkMax m_motor = new SparkMax(Constants.elevatorConstants.kLiftMotorId, MotorType.kBrushless);
 
   private final SparkMaxConfig kRotatorConfig = new SparkMaxConfig();
-
+  private final RelativeEncoder mEncoder;
 
   // CHANGE PID VALUES IN CONSTANTS IF NEEDED
   //Assuming this is roughly correct -- might change IF NEEDED.  
   /** Creates a new ElevatorSubsystem. */
   public ElevatorSubsystem() {
+     mEncoder = m_motor.getEncoder();
+     mEncoder.setPosition(0);
      kRotatorConfig
      .idleMode(IdleMode.kCoast);
      
-    //I don't know what the hell this voltage  does but it's here and it might work sooo.......
+    //I now know what voltage does and should not be used unless needed
+
+     m_motor.configure(kRotatorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     
-    m_motor.configure(kRotatorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
   }
 // Gets meters based off current position of Encoder
   public void setSpeed(double Speed){
     m_motor.set(Speed);
    
   }
+  public void climbTo(double heightInRotations, double speed){
+    if (heightInRotations > mEncoder.getPosition()){
+      m_motor.set(speed);
+      kRotatorConfig
+      .idleMode(IdleMode.kCoast);
+      m_motor.configure(kRotatorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+    }
+    if (heightInRotations >= mEncoder.getPosition()  || heightInRotations == 0){
+      m_motor.set(0);
+    }
+  }
   @Override
   public void periodic() {
-    SmartDashboard.putNumber("Elevator Encoder", m_motor.getEncoder().getPosition());
+    SmartDashboard.putNumber("Elevator Encoder", mEncoder.getPosition());
     // This method will be called once per scheduler run
   }
 

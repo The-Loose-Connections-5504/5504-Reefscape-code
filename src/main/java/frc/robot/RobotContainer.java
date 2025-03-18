@@ -4,11 +4,10 @@
 //RUN "Git pull" in TERMINAL TO SEE IF CHANGES ARE MADE TO THE CODE, WHICH THEY HAVE BEEN MOST LIKELY
 package frc.robot;
 //Imports the things used in the code
-
 import frc.robot.subsystems.BargeLift;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.KennysArm;
-import edu.wpi.first.wpilibj.DriverStation;
+
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 //Legit No difference from a CommandJoystick, just has the id's already set for a XBOX controller
@@ -55,7 +54,7 @@ public class RobotContainer {
 
   /* Setting up bindings for necessary control of the swerve drive platform */
   private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
-          .withDeadband(MaxSpeed * 0.25).withRotationalDeadband(MaxAngularRate * 0.25) // Add a 10% deadband
+          .withDeadband(MaxSpeed * 0.2).withRotationalDeadband(MaxAngularRate * 0.2) // Add a 10% deadband
           .withDriveRequestType(DriveRequestType.OpenLoopVoltage); // Use open-loop control for drive motors
   private final SwerveRequest.SwerveDriveBrake brake = new SwerveRequest.SwerveDriveBrake();
   private final SwerveRequest.PointWheelsAt point = new SwerveRequest.PointWheelsAt();
@@ -82,7 +81,7 @@ public class RobotContainer {
   double scaledDeadZoneX;
   double scaledDeadZoneY;
   double scaledDeadZoneTwist;
-  double ElevatorHeight = 0;
+  double ElevatorHeight;
 
 
   //CTRE
@@ -97,120 +96,14 @@ public class RobotContainer {
   public RobotContainer() {
   
     //Throttle --- cause the driver would kill me otherwise
-
-  //Hopefully deadband and Throttle functions as intended cause i pasted the original.. :P
-
-
-
-  //PathPlanner == DO NOT MESS WITH
-  //NAMED COMMANDS AND EVENT MARKERS NEED TO BE REGISTERED BEFORE AutoBuilder is made so HENCE why defineCommands are made there
-  //DO NOT TOUCH JAY!!!
-  configureBindings();
-  defineCommands();
-  NamedCommands.registerCommand("elevatorMoveUp", mElevator.run(()->mElevator.setSpeed(.5)).withTimeout(1));
-  NamedCommands.registerCommand("elevatorShut", mElevator.run(()->mElevator.setSpeed(.0)).withTimeout(2));
-  NamedCommands.registerCommand("KennyArmMoveUp", mKennysArm.run(()->mKennysArm.rotateArm(.5)).withTimeout(1));
-  NamedCommands.registerCommand("kennyArmShoot", mKennysArm.run(()->mKennysArm.intake(.6)).withTimeout(1.5));
-  NamedCommands.registerCommand("KennyArmShutOff", mKennysArm.run(()->mKennysArm.rotateArm(0)).withTimeout(2));
-  NamedCommands.registerCommand("KennyArmIntakeShutOff", mKennysArm.run(()->mKennysArm.intake(0)).withTimeout(2));
-  kChooser  = AutoBuilder.buildAutoChooser("Drive in a Straight Line");
-  SmartDashboard.putData("Auto Mode", kChooser);
-
-  }
-
-  /**
-   * Use this method to define your trigger->command mappings. Triggers can be created via thes
-   * {@link Trigger#Trigger(java.util.function.BooleanSupplier)} constructor with an arbitrary
-   * predicate, or via the named factories in {@link
-   * edu.wpi.first.wpilibj2.command.button.CommandGenericHID}'s subclasses for {@link
-   * CommandXboxController Xbox}/{@link edu.wpi.first.wpilibj2.command.button.CommandPS4Controller
-   * PS4} controllers or {@link edu.wpi.first.wpilibj2.command.button.CommandJoystick Flight
-   * joysticks}.
-   */
-  private void configureBindings() {
-    //this cluster of a line controls the driving- currently doesn't have throttle- will fix ASAP
-
-    //Button Inputs  and ()-> is required
-    //Quinton' BargeLift - Player 1
-    stick1.x()
-      .onTrue(mBargeLift.run(()->mBargeLift.powerBarge(1)))
-      .onFalse(mBargeLift.run(()->mBargeLift.powerBarge(0)));
-
-    stick1.y()
-      .onTrue(mBargeLift.run(()->mBargeLift.powerBarge(-1)))
-      .onFalse(mBargeLift.run(()->mBargeLift.powerBarge(0)));
-    //Kenny's Arm - Player 2
-    stick2.rightBumper()
-      .onTrue(mKennysArm.run(()->mKennysArm.rotateArm(-0.25)))
-      .onFalse(mKennysArm.run(()->mKennysArm.rotateArm(0)));
-    stick2.leftBumper()
-      .onTrue(mKennysArm.run(()->mKennysArm.rotateArm(0.25)))
-      .onFalse(mKennysArm.run(()->mKennysArm.rotateArm(0)));
-    stick2.a()
-      .onTrue(mKennysArm.run(()->mKennysArm.intake(-1)))
-      .onFalse(mKennysArm.run(()->mKennysArm.intake(0)));
-    stick2.b()
-      .onTrue(mKennysArm.run(()->mKennysArm.intake(1)))
-      .onFalse(mKennysArm.run(()->mKennysArm.intake(0)));
-
-    //Carsen and Nickolas' AlgeMover - Player 2
-      //Swifty Elevator 
-    stick2.povUp() //POV == Dpad
-      .onTrue(mElevator.run(()-> mElevator.setSpeed(-0.55)))
-      .onFalse(mElevator.run(()-> mElevator.setSpeed(0)));
-    stick2.povDown()
-      .onTrue(mElevator.run(()-> mElevator.setSpeed(0.55)))
-      .onFalse(mElevator.run(()-> mElevator.setSpeed(0)));
-
-    if (stick2.povUp().getAsBoolean() == true  & ElevatorHeight <=2000) {
-      ElevatorHeight += 0.02; 
-    }
-    if (stick2.povDown().getAsBoolean() == true & ElevatorHeight >=0);
-    { ElevatorHeight -= 0.02;}
-
-    //DRIVING
-    drivetrain.setDefaultCommand(
-            // Drivetrain will execute this command periodically
-            drivetrain.applyRequest(() ->
-                drive.withVelocityX(-(stick1.getLeftY())* MaxSpeed/2) // Drive forward with negative Y (forward)
-                    .withVelocityY(-stick1.getLeftX() * MaxSpeed/2) // Drive left with negative X (left)
-                    .withRotationalRate(-stick1.getRightX() * MaxAngularRate/2) // Drive counterclockwise with negative X (left)
-            )
-        );
-        stick1.a().whileTrue(drivetrain.applyRequest(() -> brake));
-        stick1.b().whileTrue(drivetrain.applyRequest(() ->
-            point.withModuleDirection(new Rotation2d(-stick1.getLeftY(), -stick1.getLeftX()))
-        ));
-
-        stick1.pov(0).whileTrue(drivetrain.applyRequest(() ->
-            forwardStraight.withVelocityX(0.5).withVelocityY(0))
-        );
-        stick1.pov(180).whileTrue(drivetrain.applyRequest(() ->
-            forwardStraight.withVelocityX(-0.5).withVelocityY(0))
-        );
-
-        // Run SysId routines when holding back/start and X/Y.
-        // Note that each routine should be run exactly once in a single log.
-        stick1.back().and(stick1.y()).whileTrue(drivetrain.sysIdDynamic(Direction.kForward));
-        stick1.back().and(stick1.x()).whileTrue(drivetrain.sysIdDynamic(Direction.kReverse));
-        stick1.start().and(stick1.y()).whileTrue(drivetrain.sysIdQuasistatic(Direction.kForward));
-        stick1.start().and(stick1.x()).whileTrue(drivetrain.sysIdQuasistatic(Direction.kReverse));
-
-        // reset the field-centric heading on left bumper press
-        stick1.leftBumper().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldCentric()));
-
-        drivetrain.registerTelemetry(logger::telemeterize);
-
-
-    if (DriverStation.isTeleopEnabled()){
-      if ((stick1.getLeftTriggerAxis() > threshHoldTrig1 || stick1.getLeftTriggerAxis() < threshHoldTrig1) && !(throttle < 0))
+    if ((stick1.getRawAxis(2) > threshHoldTrig1 || stick1.getRawAxis(2) < threshHoldTrig1) && !(throttle < 0))
 		{
-			throttle = (throttle - (stick1.getLeftTriggerAxis()/30));
+			throttle = (throttle - (stick1.getRawAxis(2)/30));
 		}
 
-		if ((stick1.getRightTriggerAxis() > threshHoldTrig2 || stick1.getRightTriggerAxis() < threshHoldTrig2) && !(throttle > 1))
+		if ((stick1.getRawAxis(3) > threshHoldTrig2 || stick1.getRawAxis(3) < threshHoldTrig2) && !(throttle > 1))
 		{
-			throttle = (throttle + (stick1.getRightTriggerAxis()/30));
+			throttle = (throttle + (stick1.getRawAxis(3)/30));
 		}
     //Clean Up throttle Value
     if(throttle > 1 || throttle < 0)
@@ -219,7 +112,7 @@ public class RobotContainer {
 		}
 
     //Deadband 
-     if (stick1.getRawAxis(1) > threshHoldY || stick1.getRawAxis(1) < threshHoldY * -1) 
+    if (stick1.getRawAxis(1) > threshHoldY || stick1.getRawAxis(1) < threshHoldY * -1) 
 		{
 			scaledDeadZoneY = stick1.getRawAxis(1);
 		}
@@ -243,10 +136,100 @@ public class RobotContainer {
       {
         scaledDeadZoneTwist = 0;
       }
-    }
+
+  //Hopefully deadband and Throttle functions as intended cause i pasted the original.. :P
+      System.out.println(ElevatorHeight);
+
+
+
+  //PathPlanner == DO NOT MESS WITH
+  //NAMED COMMANDS AND EVENT MARKERS NEED TO BE REGISTERED BEFORE AutoBuilder is built
+
+  NamedCommands.registerCommand("elevatorMoveUp", mElevator.run(()->mElevator.setSpeed(.5)).withTimeout(1));
+  NamedCommands.registerCommand("elevatorShut", mElevator.run(()->mElevator.setSpeed(.0)).withTimeout(2));
+  NamedCommands.registerCommand("KennyArmMoveUp", mKennysArm.run(()->mKennysArm.rotateArm(.5)).withTimeout(1));
+  NamedCommands.registerCommand("kennyArmShoot", mKennysArm.run(()->mKennysArm.intake(.6)).withTimeout(1.5));
+  NamedCommands.registerCommand("KennyArmShutOff", mKennysArm.run(()->mKennysArm.rotateArm(0)).withTimeout(2));
+  NamedCommands.registerCommand("KennyArmIntakeShutOff", mKennysArm.run(()->mKennysArm.intake(0)).withTimeout(2));
+  kChooser  = AutoBuilder.buildAutoChooser("Drive in a Straight Line");
+  SmartDashboard.putData("Auto Mode", kChooser);
+  configureBindings();
+  defineCommands();
+
+  }
+
+  /**
+   * Use this method to define your trigger->command mappings. Triggers can be created via thes
+   * {@link Trigger#Trigger(java.util.function.BooleanSupplier)} constructor with an arbitrary
+   * predicate, or via the named factories in {@link
+   * edu.wpi.first.wpilibj2.command.button.CommandGenericHID}'s subclasses for {@link
+   * CommandXboxController Xbox}/{@link edu.wpi.first.wpilibj2.command.button.CommandPS4Controller
+   * PS4} controllers or {@link edu.wpi.first.wpilibj2.command.button.CommandJoystick Flight
+   * joysticks}.
+   */
+  private void configureBindings() {
+    //this cluster of a line controls the driving- currently doesn't have throttle- will fix ASAP
+
+    //Button Inputs  and ()-> is required
+    //Quinton' BargeLift - Player 1
+    /**stick1.x()
+      .onTrue(mBargeLift.run(()->mBargeLift.powerBarge(.5)))
+      .onFalse(mBargeLift.run(()->mBargeLift.powerBarge(0)));
+
+    stick1.y()
+      .onTrue(mBargeLift.run(()->mBargeLift.powerBarge(-.5)))
+      .onFalse(mBargeLift.run(()->mBargeLift.powerBarge(0)));
+ */
+    //Kenny's Arm - Player 2
+    stick2.rightBumper()
+      .onTrue(mKennysArm.run(()->mKennysArm.rotateArm(-.25)))
+      .onFalse(mKennysArm.run(()->mKennysArm.rotateArm(0)));
+    stick2.leftBumper()
+      .onTrue(mKennysArm.run(()->mKennysArm.rotateArm(.25)))
+      .onFalse(mKennysArm.run(()->mKennysArm.rotateArm(0)));
+    stick2.a()
+      .onTrue(mKennysArm.run(()->mKennysArm.intake(-.5)))
+      .onFalse(mKennysArm.run(()->mKennysArm.intake(0)));
+
+    //Carsen and Nickolas' AlgeMover - Player 2
+      //Swifty Elevator 
+    stick2.povUp() //POV == Dpad
+      .onTrue(mElevator.run(()-> mElevator.setSpeed(-0.5)).until(()-> ElevatorHeight <= 2000))
+      .onFalse(mElevator.run(()-> mElevator.setSpeed(0)));
+    stick2.povDown()
+      .onTrue(mElevator.run(()-> mElevator.setSpeed(0.5)).until(()-> ElevatorHeight >= 0))
+      .onFalse(mElevator.run(()-> mElevator.setSpeed(0)));  
+    
+
+    //DRIVING
+    drivetrain.setDefaultCommand(
+            // Drivetrain will execute this command periodically
+            drivetrain.applyRequest(() ->
+                drive.withVelocityX(-stick1.getLeftY()* MaxSpeed) // Drive forward with negative Y (forward)
+                    .withVelocityY(-stick1.getLeftX()  * MaxSpeed) // Drive left with negative X (left)
+                    .withRotationalRate(-stick1.getRightX() * MaxAngularRate) // Drive counterclockwise with negative X (left)
+            )
+        );
+    stick1.a().whileTrue(drivetrain.applyRequest(() -> brake));
+
+
+    stick1.pov(0).whileTrue(drivetrain.applyRequest(() ->
+            forwardStraight.withVelocityX(0.5).withVelocityY(0))
+        );
+    stick1.pov(180).whileTrue(drivetrain.applyRequest(() ->
+            forwardStraight.withVelocityX(-0.5).withVelocityY(0))
+        );
+       
+    stick1.leftBumper().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldCentric()));
+
+        drivetrain.registerTelemetry(logger::telemeterize);
+
   }
   public void defineCommands(){
-
+    //Adds a tab to the Shuffleboard based off the SmartDashBoard
+    
+    //Adds the options for the commands created in Autos.java
+    
   }
   //Getting the Angle and Speed 
   /**
