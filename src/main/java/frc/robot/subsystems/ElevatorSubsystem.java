@@ -10,6 +10,9 @@ import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
+
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
@@ -17,7 +20,7 @@ import frc.robot.Constants;
 public class ElevatorSubsystem extends SubsystemBase {
   //defines objects
   private final SparkMax m_motor = new SparkMax(Constants.elevatorConstants.kLiftMotorId, MotorType.kBrushless);
-  private final RelativeEncoder m_Encoder = m_motor.getEncoder();
+
   private final SparkMaxConfig kRotatorConfig = new SparkMaxConfig();
 
 
@@ -25,8 +28,9 @@ public class ElevatorSubsystem extends SubsystemBase {
   //Assuming this is roughly correct -- might change IF NEEDED.  
   /** Creates a new ElevatorSubsystem. */
   public ElevatorSubsystem() {
-     kRotatorConfig.idleMode(IdleMode.kCoast);
-     m_Encoder.setPosition(0);
+     kRotatorConfig
+     .idleMode(IdleMode.kCoast);
+     
     //I don't know what the hell this voltage  does but it's here and it might work sooo.......
     
     m_motor.configure(kRotatorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
@@ -34,10 +38,11 @@ public class ElevatorSubsystem extends SubsystemBase {
 // Gets meters based off current position of Encoder
   public void setSpeed(double Speed){
     m_motor.set(Speed);
+   
   }
   @Override
   public void periodic() {
-    System.out.println(m_Encoder.getPosition());
+    SmartDashboard.putNumber("Elevator Encoder", m_motor.getEncoder().getPosition());
     // This method will be called once per scheduler run
   }
 
