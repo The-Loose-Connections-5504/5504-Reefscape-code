@@ -21,7 +21,10 @@ public class BargeLift extends SubsystemBase {
   private final SparkMaxConfig kRotatorConfig = new SparkMaxConfig();
   /** Creates a new BargeLift. */
   public BargeLift() {
-    kRotatorConfig.idleMode(IdleMode.kCoast);
+    kRotatorConfig
+    .idleMode(IdleMode.kCoast)
+    .smartCurrentLimit(60);
+
     //I don't know what the hell this voltage  does but it's here and it might work sooo.......
     
     kBargeMotor.configure(kRotatorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
