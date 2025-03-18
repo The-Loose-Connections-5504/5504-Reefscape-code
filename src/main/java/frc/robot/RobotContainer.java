@@ -138,7 +138,10 @@ public class RobotContainer {
       }
 
   //Hopefully deadband and Throttle functions as intended cause i pasted the original.. :P
-      System.out.println(ElevatorHeight);
+      
+
+
+      if ()
 
 
 
@@ -205,9 +208,9 @@ public class RobotContainer {
     drivetrain.setDefaultCommand(
             // Drivetrain will execute this command periodically
             drivetrain.applyRequest(() ->
-                drive.withVelocityX(-stick1.getLeftY()* MaxSpeed) // Drive forward with negative Y (forward)
-                    .withVelocityY(-stick1.getLeftX()  * MaxSpeed) // Drive left with negative X (left)
-                    .withRotationalRate(-stick1.getRightX() * MaxAngularRate) // Drive counterclockwise with negative X (left)
+                drive.withVelocityX(-stick1.getLeftY()* MaxSpeed/2) // Drive forward with negative Y (forward)
+                    .withVelocityY(-stick1.getLeftX()  * MaxSpeed/2) // Drive left with negative X (left)
+                    .withRotationalRate(-stick1.getRightX() * MaxAngularRate/2) // Drive counterclockwise with negative X (left)
             )
         );
     stick1.a().whileTrue(drivetrain.applyRequest(() -> brake));
