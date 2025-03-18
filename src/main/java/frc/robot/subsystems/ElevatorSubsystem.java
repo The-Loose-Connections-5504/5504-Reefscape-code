@@ -3,6 +3,7 @@
 // the WPILib BSD license file in the root directory of this project.
 
 package frc.robot.subsystems;
+import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkMaxConfig;
@@ -16,13 +17,16 @@ import frc.robot.Constants;
 public class ElevatorSubsystem extends SubsystemBase {
   //defines objects
   private final SparkMax m_motor = new SparkMax(Constants.elevatorConstants.kLiftMotorId, MotorType.kBrushless);
+  private final RelativeEncoder m_Encoder = m_motor.getEncoder();
   private final SparkMaxConfig kRotatorConfig = new SparkMaxConfig();
+
 
   // CHANGE PID VALUES IN CONSTANTS IF NEEDED
   //Assuming this is roughly correct -- might change IF NEEDED.  
   /** Creates a new ElevatorSubsystem. */
   public ElevatorSubsystem() {
      kRotatorConfig.idleMode(IdleMode.kCoast);
+     m_Encoder.setPosition(0);
     //I don't know what the hell this voltage  does but it's here and it might work sooo.......
     
     m_motor.configure(kRotatorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
@@ -33,6 +37,7 @@ public class ElevatorSubsystem extends SubsystemBase {
   }
   @Override
   public void periodic() {
+    System.out.println(m_Encoder.getPosition());
     // This method will be called once per scheduler run
   }
 

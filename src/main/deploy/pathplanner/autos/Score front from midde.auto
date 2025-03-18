@@ -7,19 +7,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Score Step 1"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "elevatorMoveUp"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "elevatorShut"
+            "pathName": "Drive Straight"
           }
         },
         {
@@ -51,12 +39,6 @@
                 }
               }
             ]
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Curvy Line to next"
           }
         }
       ]

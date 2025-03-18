@@ -55,7 +55,7 @@ public class RobotContainer {
 
   /* Setting up bindings for necessary control of the swerve drive platform */
   private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
-          .withDeadband(MaxSpeed * 0.2).withRotationalDeadband(MaxAngularRate * 0.2) // Add a 10% deadband
+          .withDeadband(MaxSpeed * 0.25).withRotationalDeadband(MaxAngularRate * 0.25) // Add a 10% deadband
           .withDriveRequestType(DriveRequestType.OpenLoopVoltage); // Use open-loop control for drive motors
   private final SwerveRequest.SwerveDriveBrake brake = new SwerveRequest.SwerveDriveBrake();
   private final SwerveRequest.PointWheelsAt point = new SwerveRequest.PointWheelsAt();
@@ -133,11 +133,11 @@ public class RobotContainer {
     //Button Inputs  and ()-> is required
     //Quinton' BargeLift - Player 1
     stick1.x()
-      .onTrue(mBargeLift.run(()->mBargeLift.powerBarge(0.5)))
+      .onTrue(mBargeLift.run(()->mBargeLift.powerBarge(1)))
       .onFalse(mBargeLift.run(()->mBargeLift.powerBarge(0)));
 
     stick1.y()
-      .onTrue(mBargeLift.run(()->mBargeLift.powerBarge(-0.5)))
+      .onTrue(mBargeLift.run(()->mBargeLift.powerBarge(-1)))
       .onFalse(mBargeLift.run(()->mBargeLift.powerBarge(0)));
     //Kenny's Arm - Player 2
     stick2.rightBumper()
@@ -147,33 +147,34 @@ public class RobotContainer {
       .onTrue(mKennysArm.run(()->mKennysArm.rotateArm(0.25)))
       .onFalse(mKennysArm.run(()->mKennysArm.rotateArm(0)));
     stick2.a()
-      .onTrue(mKennysArm.run(()->mKennysArm.intake(-0.5)))
+      .onTrue(mKennysArm.run(()->mKennysArm.intake(-1)))
       .onFalse(mKennysArm.run(()->mKennysArm.intake(0)));
     stick2.b()
-      .onTrue(mKennysArm.run(()->mKennysArm.intake(0.5)))
+      .onTrue(mKennysArm.run(()->mKennysArm.intake(1)))
       .onFalse(mKennysArm.run(()->mKennysArm.intake(0)));
 
     //Carsen and Nickolas' AlgeMover - Player 2
       //Swifty Elevator 
     stick2.povUp() //POV == Dpad
-      .onTrue(mElevator.run(()-> mElevator.setSpeed(-0.5)).until(()-> ElevatorHeight <= 2000))
+      .onTrue(mElevator.run(()-> mElevator.setSpeed(-0.55)))
       .onFalse(mElevator.run(()-> mElevator.setSpeed(0)));
     stick2.povDown()
-      .onTrue(mElevator.run(()-> mElevator.setSpeed(0.5)).until(()-> ElevatorHeight >= 0))
-      .onFalse(mElevator.run(()-> mElevator.setSpeed(0)));  
-    /*if (stick2.povUp().getAsBoolean() == true  & ElevatorHeight <=2000) {
+      .onTrue(mElevator.run(()-> mElevator.setSpeed(0.55)))
+      .onFalse(mElevator.run(()-> mElevator.setSpeed(0)));
+
+    if (stick2.povUp().getAsBoolean() == true  & ElevatorHeight <=2000) {
       ElevatorHeight += 0.02; 
     }
     if (stick2.povDown().getAsBoolean() == true & ElevatorHeight >=0);
-    { ElevatorHeight -= 0.02;}*/
+    { ElevatorHeight -= 0.02;}
 
     //DRIVING
     drivetrain.setDefaultCommand(
             // Drivetrain will execute this command periodically
             drivetrain.applyRequest(() ->
-                drive.withVelocityX(-(stick1.getLeftY())* MaxSpeed) // Drive forward with negative Y (forward)
-                    .withVelocityY(-stick1.getLeftX() * MaxSpeed) // Drive left with negative X (left)
-                    .withRotationalRate(-stick1.getRightX() * MaxAngularRate) // Drive counterclockwise with negative X (left)
+                drive.withVelocityX(-(stick1.getLeftY())* MaxSpeed/2) // Drive forward with negative Y (forward)
+                    .withVelocityY(-stick1.getLeftX() * MaxSpeed/2) // Drive left with negative X (left)
+                    .withRotationalRate(-stick1.getRightX() * MaxAngularRate/2) // Drive counterclockwise with negative X (left)
             )
         );
         stick1.a().whileTrue(drivetrain.applyRequest(() -> brake));
