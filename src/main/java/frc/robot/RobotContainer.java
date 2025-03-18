@@ -133,35 +133,61 @@ public class RobotContainer {
     //Button Inputs  and ()-> is required
     //Quinton' BargeLift - Player 1
     stick1.x()
+<<<<<<< HEAD
       .onTrue(mBargeLift.run(()->mBargeLift.powerBarge(1)))
       .onFalse(mBargeLift.run(()->mBargeLift.powerBarge(0)));
 
     stick1.y()
       .onTrue(mBargeLift.run(()->mBargeLift.powerBarge(-1)))
       .onFalse(mBargeLift.run(()->mBargeLift.powerBarge(0)));
+=======
+      .whileTrue(mBargeLift.run(()->mBargeLift.powerBarge(1))
+      .finallyDo(()->mBargeLift.powerBarge(0.0)));
+
+    stick1.y()
+      .whileTrue(mBargeLift.run(()->mBargeLift.powerBarge(-1))
+      .finallyDo(()->mBargeLift.powerBarge(0)));
+>>>>>>> ec8321b11a1c5d1391a3a1a88e893b3224c723db
     //Kenny's Arm - Player 2
     stick2.rightBumper()
-      .onTrue(mKennysArm.run(()->mKennysArm.rotateArm(-0.25)))
-      .onFalse(mKennysArm.run(()->mKennysArm.rotateArm(0)));
+      .whileTrue(mKennysArm.run(()->mKennysArm.rotateArm(-0.25))
+      .finallyDo(()->mKennysArm.rotateArm(0)));
+      
     stick2.leftBumper()
-      .onTrue(mKennysArm.run(()->mKennysArm.rotateArm(0.25)))
-      .onFalse(mKennysArm.run(()->mKennysArm.rotateArm(0)));
+    .whileTrue(mKennysArm.run(()->mKennysArm.rotateArm(0.25))
+    .finallyDo(()->mKennysArm.rotateArm(0)));
     stick2.a()
+<<<<<<< HEAD
       .onTrue(mKennysArm.run(()->mKennysArm.intake(-1)))
       .onFalse(mKennysArm.run(()->mKennysArm.intake(0)));
     stick2.b()
       .onTrue(mKennysArm.run(()->mKennysArm.intake(1)))
       .onFalse(mKennysArm.run(()->mKennysArm.intake(0)));
+=======
+      .whileTrue(mKennysArm.run(()->mKennysArm.intake(-1))
+      .finallyDo(()->mKennysArm.intake(0)));
+    stick2.b()
+      .whileTrue(mKennysArm.run(()->mKennysArm.intake(1))
+      .finallyDo(()->mKennysArm.intake(0)));
+>>>>>>> ec8321b11a1c5d1391a3a1a88e893b3224c723db
 
     //Carsen and Nickolas' AlgeMover - Player 2
       //Swifty Elevator 
     stick2.povUp() //POV == Dpad
+<<<<<<< HEAD
       .onTrue(mElevator.run(()-> mElevator.setSpeed(-0.55)))
       .onFalse(mElevator.run(()-> mElevator.setSpeed(0)));
     stick2.povDown()
       .onTrue(mElevator.run(()-> mElevator.setSpeed(0.55)))
       .onFalse(mElevator.run(()-> mElevator.setSpeed(0)));
 
+=======
+      .whileTrue(mElevator.run(()-> mElevator.setSpeed(-0.5)).until(()-> ElevatorHeight <= 2000)
+      .finallyDo(()->mElevator.setSpeed(0)));
+    stick2.povDown()
+      .whileTrue(mElevator.run(()-> mElevator.setSpeed(0.5)).until(()-> ElevatorHeight <= 2000)
+      .finallyDo(()->mElevator.setSpeed(0)));
+>>>>>>> ec8321b11a1c5d1391a3a1a88e893b3224c723db
     if (stick2.povUp().getAsBoolean() == true  & ElevatorHeight <=2000) {
       ElevatorHeight += 0.02; 
     }
@@ -172,8 +198,13 @@ public class RobotContainer {
     drivetrain.setDefaultCommand(
             // Drivetrain will execute this command periodically
             drivetrain.applyRequest(() ->
+<<<<<<< HEAD
                 drive.withVelocityX(-(stick1.getLeftY())* MaxSpeed/2) // Drive forward with negative Y (forward)
                     .withVelocityY(-stick1.getLeftX() * MaxSpeed/2) // Drive left with negative X (left)
+=======
+                drive.withVelocityX(-stick1.getLeftY() *MaxSpeed/2) // Drive forward with negative Y (forward)
+                    .withVelocityY(-stick1.getLeftX()*  MaxSpeed/2) // Drive left with negative X (left)
+>>>>>>> ec8321b11a1c5d1391a3a1a88e893b3224c723db
                     .withRotationalRate(-stick1.getRightX() * MaxAngularRate/2) // Drive counterclockwise with negative X (left)
             )
         );
@@ -188,7 +219,7 @@ public class RobotContainer {
         stick1.pov(180).whileTrue(drivetrain.applyRequest(() ->
             forwardStraight.withVelocityX(-0.5).withVelocityY(0))
         );
-
+        System.out.print(-stick1.getLeftX()*  MaxSpeed);
         // Run SysId routines when holding back/start and X/Y.
         // Note that each routine should be run exactly once in a single log.
         stick1.back().and(stick1.y()).whileTrue(drivetrain.sysIdDynamic(Direction.kForward));
@@ -208,9 +239,9 @@ public class RobotContainer {
 			throttle = (throttle - (stick1.getLeftTriggerAxis()/30));
 		}
 
-		if ((stick1.getRightTriggerAxis() > threshHoldTrig2 || stick1.getRightTriggerAxis() < threshHoldTrig2) && !(throttle > 1))
+		if ((stick1.getRawAxis(3) > threshHoldTrig2 || stick1.getRawAxis(3) < threshHoldTrig2) && !(throttle > 1))
 		{
-			throttle = (throttle + (stick1.getRightTriggerAxis()/30));
+			throttle = (throttle + (stick1.getRawAxis(3)/30));
 		}
     //Clean Up throttle Value
     if(throttle > 1 || throttle < 0)
@@ -219,25 +250,25 @@ public class RobotContainer {
 		}
 
     //Deadband 
-     if (stick1.getRawAxis(1) > threshHoldY || stick1.getRawAxis(1) < threshHoldY * -1) 
+     if (stick1.getLeftY() > threshHoldY || stick1.getLeftY() < threshHoldY * -1) 
 		{
-			scaledDeadZoneY = stick1.getRawAxis(1);
+			scaledDeadZoneY = stick1.getLeftY();
 		}
 		  else 
 		  {
 			scaledDeadZoneY = 0;
 		}
-    if (stick1.getRawAxis(0) > threshHoldX || stick1.getRawAxis(0) < threshHoldX * -1)
+    if (stick1.getLeftX() > threshHoldX || stick1.getLeftX() < threshHoldX * -1)
      {
-      scaledDeadZoneX = stick1.getRawAxis(0);
+      scaledDeadZoneX = stick1.getLeftX();
       }
       else 
         {
           scaledDeadZoneX = 0;
         }
-    if (stick1.getRawAxis(4) > threshHoldZ || stick1.getRawAxis(4) < threshHoldZ * -1) 
+    if (stick1.getRightX() > threshHoldZ || stick1.getRightX() < threshHoldZ * -1) 
       {
-        scaledDeadZoneTwist = stick1.getRawAxis(4);
+        scaledDeadZoneTwist = stick1.getRightX();
       }
       else 
       {
