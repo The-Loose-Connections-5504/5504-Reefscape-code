@@ -78,6 +78,7 @@ public class Robot extends TimedRobot {
     else{
       CommandScheduler.getInstance().cancelAll();
     }
+    
   }
 
   /** This function is called periodically during operator control. */

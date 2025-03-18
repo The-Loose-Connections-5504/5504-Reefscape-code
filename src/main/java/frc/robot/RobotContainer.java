@@ -7,9 +7,14 @@ package frc.robot;
 import frc.robot.subsystems.BargeLift;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.KennysArm;
-
+import frc.robot.subsystems.ThrottleValues;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.RobotBase;
+import edu.wpi.first.wpilibj.RobotState;
+import edu.wpi.first.wpilibj.simulation.DriverStationSim;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
+
 //Legit No difference from a CommandJoystick, just has the id's already set for a XBOX controller
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -47,6 +52,7 @@ public class RobotContainer {
   private final BargeLift mBargeLift = new BargeLift();
   private final KennysArm mKennysArm = new KennysArm();
   private final ElevatorSubsystem mElevator = new ElevatorSubsystem();
+  private final ThrottleValues throttleValues = new ThrottleValues(stick1);
   //The Auton Chooser is defined here...
 //CTRE
   private double MaxSpeed = TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
@@ -71,17 +77,7 @@ public class RobotContainer {
 
 
   //Values for throttle 
-  double threshHoldY = 0.15;
-  double threshHoldX = 0.15;
-  double threshHoldZ = 0.15;
-  double threshHoldTrig1 = 0.1;
-  double threshHoldTrig2 = 0.1;
-  double throttle = 0.25;
-  //Deadzone
-  double scaledDeadZoneX;
-  double scaledDeadZoneY;
-  double scaledDeadZoneTwist;
-  double ElevatorHeight;
+
 
 
   //CTRE
@@ -96,54 +92,10 @@ public class RobotContainer {
   public RobotContainer() {
   
     //Throttle --- cause the driver would kill me otherwise
-    if ((stick1.getRawAxis(2) > threshHoldTrig1 || stick1.getRawAxis(2) < threshHoldTrig1) && !(throttle < 0))
-		{
-			throttle = (throttle - (stick1.getRawAxis(2)/30));
-		}
-
-		if ((stick1.getRawAxis(3) > threshHoldTrig2 || stick1.getRawAxis(3) < threshHoldTrig2) && !(throttle > 1))
-		{
-			throttle = (throttle + (stick1.getRawAxis(3)/30));
-		}
-    //Clean Up throttle Value
-    if(throttle > 1 || throttle < 0)
-		{
-			throttle = Math.round(throttle);
-		}
-
-    //Deadband 
-    if (stick1.getRawAxis(1) > threshHoldY || stick1.getRawAxis(1) < threshHoldY * -1) 
-		{
-			scaledDeadZoneY = stick1.getRawAxis(1);
-		}
-		  else 
-		  {
-			scaledDeadZoneY = 0;
-		}
-    if (stick1.getRawAxis(0) > threshHoldX || stick1.getRawAxis(0) < threshHoldX * -1)
-     {
-      scaledDeadZoneX = stick1.getRawAxis(0);
-      }
-      else 
-        {
-          scaledDeadZoneX = 0;
-        }
-    if (stick1.getRawAxis(4) > threshHoldZ || stick1.getRawAxis(4) < threshHoldZ * -1) 
-      {
-        scaledDeadZoneTwist = stick1.getRawAxis(4);
-      }
-      else 
-      {
-        scaledDeadZoneTwist = 0;
-      }
-
+  
   //Hopefully deadband and Throttle functions as intended cause i pasted the original.. :P
       
 
-
-      SmartDashboard.getNumber(
-        "Throttle", throttle
-      );
 
 
 
@@ -159,7 +111,7 @@ public class RobotContainer {
   kChooser  = AutoBuilder.buildAutoChooser("Drive in a Straight Line");
   SmartDashboard.putData("Auto Mode", kChooser);
   configureBindings();
-  defineCommands();
+
 
   }
 
@@ -177,14 +129,14 @@ public class RobotContainer {
 
     //Button Inputs  and ()-> is required
     //Quinton' BargeLift - Player 1
-    /**stick1.x()
-      .onTrue(mBargeLift.run(()->mBargeLift.powerBarge(.5)))
+    stick1.x()
+      .onTrue(mBargeLift.run(()->mBargeLift.powerBarge(1)))
       .onFalse(mBargeLift.run(()->mBargeLift.powerBarge(0)));
 
     stick1.y()
-      .onTrue(mBargeLift.run(()->mBargeLift.powerBarge(-.5)))
+      .onTrue(mBargeLift.run(()->mBargeLift.powerBarge(-1)))
       .onFalse(mBargeLift.run(()->mBargeLift.powerBarge(0)));
- */
+ 
     //Kenny's Arm - Player 2
     stick2.rightBumper()
       .onTrue(mKennysArm.run(()->mKennysArm.rotateArm(-.25)))
@@ -199,13 +151,13 @@ public class RobotContainer {
       .onTrue(mKennysArm.run(()->mKennysArm.intake(-1)))
       .onFalse(mKennysArm.run(()->mKennysArm.intake(0)));
 
-    //Carsen and Nickolas' AlgeMover - Player 2
+    
       //Swifty Elevator 
     stick2.povUp() //POV == Dpad
-      .onTrue(mElevator.run(()-> mElevator.setSpeed(-0.55)).until(()-> ElevatorHeight <= 2000))
+      .onTrue(mElevator.run(()-> mElevator.setSpeed(-0.55)))
       .onFalse(mElevator.run(()-> mElevator.setSpeed(0)));
     stick2.povDown()
-      .onTrue(mElevator.run(()-> mElevator.setSpeed(0.55)).until(()-> ElevatorHeight >= 0))
+      .onTrue(mElevator.run(()-> mElevator.setSpeed(0.55)))
       .onFalse(mElevator.run(()-> mElevator.setSpeed(0)));  
     
 
@@ -213,9 +165,9 @@ public class RobotContainer {
     drivetrain.setDefaultCommand(
             // Drivetrain will execute this command periodically
             drivetrain.applyRequest(() ->
-                drive.withVelocityX(-stick1.getLeftY()* MaxSpeed/2) // Drive forward with negative Y (forward)
-                    .withVelocityY(-stick1.getLeftX()  * MaxSpeed/2) // Drive left with negative X (left)
-                    .withRotationalRate(-stick1.getRightX() * MaxAngularRate/2) // Drive counterclockwise with negative X (left)
+                drive.withVelocityX(-throttleValues.Y_AXIS()* MaxSpeed) // Drive forward with negative Y (forward)
+                    .withVelocityY(-throttleValues.X_AXIS() * MaxSpeed) // Drive left with negative X (left)
+                    .withRotationalRate(-throttleValues.Twist_AXIS() * MaxAngularRate) // Drive counterclockwise with negative X (left)
             )
         );
     stick1.a().whileTrue(drivetrain.applyRequest(() -> brake));
@@ -231,14 +183,17 @@ public class RobotContainer {
     stick1.leftBumper().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldCentric()));
 
         drivetrain.registerTelemetry(logger::telemeterize);
+  }
 
-  }
-  public void defineCommands(){
-    //Adds a tab to the Shuffleboard based off the SmartDashBoard
+
+      
+  
+
     
-    //Adds the options for the commands created in Autos.java
+
+
     
-  }
+
   //Getting the Angle and Speed 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
