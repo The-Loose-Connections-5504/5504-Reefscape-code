@@ -43,14 +43,14 @@ public class ElevatorSubsystem extends SubsystemBase {
     m_motor.set(Speed);
    
   }
-  public void climbTo(double heightInRotations){
-    if (heightInRotations > mEncoder.getPosition()){
+  public void climbTo(double height){
+    if (height > mEncoder.getPosition()){
       setSpeed(-0.55);
       kRotatorConfig
       .idleMode(IdleMode.kCoast);
       m_motor.configure(kRotatorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     }
-    else if(heightInRotations < mEncoder.getPosition() && mEncoder.getPosition() >= 0 ){
+    else if(height < mEncoder.getPosition() && mEncoder.getPosition() > 0){
       setSpeed(0.55);
       kRotatorConfig
         .idleMode(IdleMode.kCoast);
