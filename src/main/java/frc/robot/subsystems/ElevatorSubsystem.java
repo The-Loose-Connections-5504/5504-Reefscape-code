@@ -11,7 +11,7 @@ import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -31,7 +31,7 @@ public class ElevatorSubsystem extends SubsystemBase {
      mEncoder = m_motor.getEncoder();
      mEncoder.setPosition(0);
      kRotatorConfig
-     .idleMode(IdleMode.kCoast);
+     .idleMode(IdleMode.kBrake);
      
     //I now know what voltage does and should not be used unless needed
 
@@ -43,16 +43,24 @@ public class ElevatorSubsystem extends SubsystemBase {
     m_motor.set(Speed);
    
   }
-  public void climbTo(double heightInRotations, double speed){
+  public void climbTo(double heightInRotations){
     if (heightInRotations > mEncoder.getPosition()){
-      m_motor.set(speed);
+      setSpeed(-0.55);
       kRotatorConfig
       .idleMode(IdleMode.kCoast);
       m_motor.configure(kRotatorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     }
-    if (heightInRotations >= mEncoder.getPosition()  || heightInRotations == 0){
-      m_motor.set(0);
+    else if(heightInRotations < mEncoder.getPosition() && mEncoder.getPosition() >= 0 ){
+      setSpeed(0.55);
+      kRotatorConfig
+        .idleMode(IdleMode.kCoast);
+      m_motor.configure(kRotatorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     }
+    else
+      setSpeed(0);
+      kRotatorConfig
+      . idleMode(IdleMode.kBrake);
+      m_motor.configure(kRotatorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
   }
   @Override
   public void periodic() {
