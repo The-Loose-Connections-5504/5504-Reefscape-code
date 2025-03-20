@@ -43,16 +43,22 @@ public class ElevatorSubsystem extends SubsystemBase {
     m_motor.set(Speed);
    
   }
+  //7.0 about 1 inch 
   public void climbTo(double heightInRotations, double speed){
-    if (heightInRotations > mEncoder.getPosition()){
+    if (heightInRotations < mEncoder.getPosition()){
       m_motor.set(speed);
       kRotatorConfig
       .idleMode(IdleMode.kCoast);
       m_motor.configure(kRotatorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     }
-    if (heightInRotations >= mEncoder.getPosition()  || heightInRotations == 0){
+    if (heightInRotations >= mEncoder.getPosition()){
       m_motor.set(0);
+      kRotatorConfig
+      .idleMode(IdleMode.kBrake);
+      m_motor.configure(kRotatorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     }
+    
+    
   }
   @Override
   public void periodic() {
