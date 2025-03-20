@@ -130,37 +130,43 @@ public class RobotContainer {
     //Button Inputs  and ()-> is required
     //Quinton' BargeLift - Player 1
     stick1.x()
-      .onTrue(mBargeLift.run(()->mBargeLift.powerBarge(1)))
-      .onFalse(mBargeLift.run(()->mBargeLift.powerBarge(0)));
-
+      .whileTrue(mBargeLift.run(()->mBargeLift.powerBarge(1))
+      .finallyDo(()->mBargeLift.powerBarge(0)));
+      
     stick1.y()
-      .onTrue(mBargeLift.run(()->mBargeLift.powerBarge(-1)))
-      .onFalse(mBargeLift.run(()->mBargeLift.powerBarge(0)));
+      .whileTrue(mBargeLift.run(()->mBargeLift.powerBarge(-1))
+      .finallyDo(()->mBargeLift.powerBarge(0)));
  
     //Kenny's Arm - Player 2
     stick2.rightBumper()
-      .onTrue(mKennysArm.run(()->mKennysArm.rotateArm(-.25)))
-      .onFalse(mKennysArm.run(()->mKennysArm.rotateArm(0)));
+      .whileTrue(mKennysArm.run(()->mKennysArm.rotateArm(-.25))
+      .finallyDo(()->mKennysArm.rotateArm(0)));
+      
     stick2.leftBumper()
-      .onTrue(mKennysArm.run(()->mKennysArm.rotateArm(.25)))
-      .onFalse(mKennysArm.run(()->mKennysArm.rotateArm(0)));
+      .whileTrue(mKennysArm.run(()->mKennysArm.rotateArm(.25))
+      .finallyDo(()->mKennysArm.rotateArm(0)));
+      
     stick2.a()
-      .onTrue(mKennysArm.run(()->mKennysArm.intake(1)))
-      .onFalse(mKennysArm.run(()->mKennysArm.intake(0)));
+      .whileTrue(mKennysArm.run(()->mKennysArm.intake(1))
+      .finallyDo(()->mKennysArm.intake(0)));
+
     stick2.b()
-      .onTrue(mKennysArm.run(()->mKennysArm.intake(-1)))
-      .onFalse(mKennysArm.run(()->mKennysArm.intake(0)));
+      .whileTrue(mKennysArm.run(()->mKennysArm.intake(-1))
+      .finallyDo(()->mKennysArm.intake(0)));
 
     
       //Swifty Elevator 
     stick2.povUp() //POV == Dpad
-      .onTrue(mElevator.run(()-> mElevator.setSpeed(-0.55)))
-      .onFalse(mElevator.run(()-> mElevator.setSpeed(0)));
+      .whileTrue(mElevator.run(()-> mElevator.setSpeed(-0.55))
+      .finallyDo(()-> mElevator.setSpeed(0)));
     stick2.povDown()
-      .onTrue(mElevator.run(()-> mElevator.setSpeed(0.55)))
-      .onFalse(mElevator.run(()-> mElevator.setSpeed(0)));  
-    
-
+      .whileTrue(mElevator.run(()-> mElevator.setSpeed(0.55))
+      .finallyDo(()-> mElevator.setSpeed(0)));  
+    //sends the elevator about 30 inches automatically at 55% speed
+    //7.04 is about 1 inch 
+    stick2.y().onTrue(mElevator.run(()-> mElevator.climbTo(211)));
+    //set the elevator back to 0 if not already at 55& speed, usefull if already at the max height
+    stick2.x().onTrue(mElevator.run(()-> mElevator.climbTo(0)));
     //DRIVING
     drivetrain.setDefaultCommand(
             // Drivetrain will execute this command periodically
