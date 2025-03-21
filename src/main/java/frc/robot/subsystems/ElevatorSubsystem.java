@@ -57,9 +57,11 @@ public class ElevatorSubsystem extends SubsystemBase {
       m_motor.configure(kRotatorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     }
     else
+    //interesting
       setSpeed(0);
       kRotatorConfig
       . idleMode(IdleMode.kBrake);
+      mEncoder.setPosition(0);
       m_motor.configure(kRotatorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
   }
   @Override
