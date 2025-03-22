@@ -32,6 +32,7 @@ public class ElevatorSubsystem extends SubsystemBase {
      mEncoder.setPosition(0);
      kRotatorConfig
      .idleMode(IdleMode.kCoast);
+    
      
     //I now know what voltage does and should not be used unless needed
 
@@ -44,22 +45,26 @@ public class ElevatorSubsystem extends SubsystemBase {
    
   }
   //7.0 about 1 inch 
-  public void climbTo(double heightInRotations, double speed){
-    if (heightInRotations < mEncoder.getPosition()){
-      m_motor.set(speed);
+  public void climbTo(double heightInRotations){
+    if (heightInRotations > mEncoder.getPosition()){
+      m_motor.set(-0.55);
       kRotatorConfig
       .idleMode(IdleMode.kCoast);
       m_motor.configure(kRotatorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     }
-    if (heightInRotations >= mEncoder.getPosition()){
+    else if (heightInRotations < mEncoder.getPosition() && mEncoder.getPosition() > 0  ){
+      m_motor.set(0.55);
+      kRotatorConfig
+      .idleMode(IdleMode.kCoast);
+      m_motor.configure(kRotatorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+    }
+    else 
       m_motor.set(0);
       kRotatorConfig
       .idleMode(IdleMode.kBrake);
       m_motor.configure(kRotatorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     }
     
-    
-  }
   @Override
   public void periodic() {
     SmartDashboard.putNumber("Elevator Encoder", mEncoder.getPosition());

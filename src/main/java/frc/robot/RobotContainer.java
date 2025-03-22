@@ -161,7 +161,7 @@ public class RobotContainer {
       .whileTrue(mElevator.run(()-> mElevator.setSpeed(0.55))
       .finallyDo(()->mElevator.setSpeed(0))); 
       
-    stick2.y().onTrue(mElevator.run(()-> mElevator.climbTo(255.29, 0.55)));
+    
     
 
     //DRIVING
