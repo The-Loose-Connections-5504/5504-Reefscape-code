@@ -22,8 +22,8 @@ public class BargeLift extends SubsystemBase {
   /** Creates a new BargeLift. */
   public BargeLift() {
     kRotatorConfig
-    .idleMode(IdleMode.kCoast)
-    .smartCurrentLimit(60);
+    .idleMode(IdleMode.kCoast);
+    
 
     //I don't know what the hell this voltage  does but it's here and it might work sooo.......
     

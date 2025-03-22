@@ -155,10 +155,10 @@ public class RobotContainer {
     
       //Swifty Elevator 
     stick2.povUp() //POV == Dpad
-      .whileTrue(mElevator.run(()-> mElevator.setSpeed(-0.55))
+      .whileTrue(mElevator.run(()-> mElevator.setSpeed(0.55))
       .finallyDo(()->mElevator.setSpeed(0)));
     stick2.povDown()
-      .whileTrue(mElevator.run(()-> mElevator.setSpeed(0.55))
+      .whileTrue(mElevator.run(()-> mElevator.setSpeed(-0.55))
       .finallyDo(()->mElevator.setSpeed(0))); 
       
     

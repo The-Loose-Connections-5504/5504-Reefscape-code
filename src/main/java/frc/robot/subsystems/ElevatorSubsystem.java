@@ -31,7 +31,8 @@ public class ElevatorSubsystem extends SubsystemBase {
      mEncoder = m_motor.getEncoder();
      mEncoder.setPosition(0);
      kRotatorConfig
-     .idleMode(IdleMode.kCoast);
+     .idleMode(IdleMode.kCoast)
+     .inverted(true);
     
      
     //I now know what voltage does and should not be used unless needed
